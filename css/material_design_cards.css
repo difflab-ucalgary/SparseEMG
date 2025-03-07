@@ -1,0 +1,194 @@
+.file-upload {
+    margin: 0 0px 0 0px;
+}
+.file-upload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    z-index: 10;
+    font-size: 28px;
+    cursor: pointer;
+    height: 36px;
+    opacity: 0;
+    filter: alpha(opacity=0); }
+
+#fileuploadurl{
+    border: none;
+    font-size: 12px;
+    padding-left: 0;
+    width: 250px; }
+
+.demo-card-event.mdl-card {
+    width: 500px;
+    height: 1000px;
+    background: #3E4EB8;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+
+.demo-card-annealingparameters.mdl-card {
+    width: 500px;
+    height: 400px;
+    background: #3E4EB8;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+.file_input_div {
+    margin: auto;
+    width: 500px;
+    height: 40px;
+}
+
+.file_input {
+    float: left;
+}
+
+#file_input_text_div {
+    width: 200px;
+    margin-top: -8px;
+    margin-left: 5px;
+}
+
+.none {
+    display: none;
+}
+
+.demo-card-logconsole.mdl-card {
+    width: 500px;
+    height: 250px;
+    background: #3E4EB8;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+.demo-card-measurement_ref.mdl-card {
+    width: 500px;
+    height: 250px;
+    background: #3E4EB8;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+.demo-card-optimization_weights.mdl-card {
+    width: 500px;
+    height: 700px;
+    background: #3E4EB8;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+.demo-card-shape-customization.mdl-card {
+    width: 500px;
+    height: 450px;
+    background: #3E4EB8;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+.demo-card-electrode_layout_control.mdl-card {
+    width: 400px;
+    height: 1050px;
+    background: #3E4EB8;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+.demo-card-forearm_polygon_control.mdl-card {
+    width: 500px;
+    height: 680px;
+    background: #3E4EB8;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+.demo-card-collapsable_header.mdl-card {
+    width: 500px;
+    height: 20px;
+    background: #3E4EB8;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+.demo-card-shape-customization > .mdl-card__actions {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.demo-card-electrode_layout_control > .mdl-card__actions {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.demo-card-forearm_polygon_control > .mdl-card__actions {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+
+.demo-card-optimizationWeights > .mdl-card__actions {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.demo-card-annealingparameters > .mdl-card__actions {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.demo-card-logconsole > .mdl-card__actions {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.demo-card-measurement_ref > .mdl-card__actions {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.demo-card-optimization_weights > .mdl-card__actions {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+
+.demo-card-event > .mdl-card__actions {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+.demo-card-event > .mdl-card__title {
+    align-items: flex-start;
+}
+.demo-card-event > .mdl-card__title > h4 {
+    margin-top: 0;
+}
+.demo-card-event > .mdl-card__actions {
+    display: flex;
+    box-sizing:border-box;
+    align-items: center;
+}
+
+
+.demo-card-event > .mdl-card__actions > .material-icons {
+    padding-right: 10px;
+}
+.demo-card-event > .mdl-card__title,
+.demo-card-event > .mdl-card__actions,
+.demo-card-event > .mdl-card__actions > .mdl-button {
+    color: #fff;
+}
+
+.demo-card-image > .mdl-card__actions {
+    height: 10px;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.2);
+}
+.demo-card-image__filename {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+

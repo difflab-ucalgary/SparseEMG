@@ -1,0 +1,51 @@
+body {
+    display: flex;
+}
+
+.file_input_div {
+    margin: auto;
+    width: 250px;
+    height: 40px;
+}
+
+.file_input {
+    float: left;
+}
+
+#file_input_text_div {
+    width: 200px;
+    margin-top: -8px;
+    margin-left: 5px;
+}
+
+.none {
+    display: none;
+}
+
+.slider_label {
+    display: block;
+    position: absolute;
+    top: -55px;
+    width: 25px;
+    height: 25px;
+    border-radius: 0 50% 50% 50%;
+    background-color: rgb(255, 64, 129);
+    transform: rotate(-135deg);
+    margin-top: 20px;
+    margin-left: -5%;
+}
+
+.slider_label div {
+    line-height: 25px;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    text-align: center;
+    transform: rotate(135deg);
+    margin-left: -5%;
+}
+
+.slider_label.zeroed {
+    background-color: rgba(255, 64, 129, 1);
+}

@@ -1,0 +1,311 @@
+<!--
+/*
+* Copyright (c) 2020.
+*
+*  MIT License
+*
+*  Copyright (c) 2020 Aditya Nittala
+*  Affiliation: Saarland University, Germany
+*
+*  Permission is hereby granted, free of charge, to any person obtaining a copy
+*  of this software and associated documentation files (the "Software"), to deal
+*  in the Software without restriction, including without limitation the rights
+*  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+*  copies of the Software, and to permit persons to whom the Software is
+*  furnished to do so, subject to the following conditions:
+*
+*  The above copyright notice and this permission notice shall be included in all
+*  copies or substantial portions of the Software.
+*
+*  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+*  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+*  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+*  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+*  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+*  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+*  SOFTWARE.
+*
+*/
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+
+  <link rel="shortcut icon" type="image/x-icon" href="icons/title_icon_64x64.png" />
+
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/material_and_icons.css"/>
+  <link rel="stylesheet" href="css/material.indigo-pink.min.css"/>
+  <link rel="stylesheet" href="css/bootstrap3.3.7.min.css"/>
+  <link rel="stylesheet" href="css/nouislider.css"/>
+
+  <link rel="stylesheet" href="css/default.css"/>
+  <link rel="stylesheet" href="css/material_design_cards.css"/>
+  <link rel="stylesheet" href="css/mdl_expansion_cards.css"/>
+  <link rel="stylesheet" href="css/generate_button_styling.css"/>
+
+
+  <script>
+    //Declare all the Global Variables here
+    var main_canvas;
+    var forearmTrapezoidPoints = new Array();
+    var forearmProperties = new Array();
+    var keyPointSet = new Array();
+    var electrodeSet = new Array();
+    var baselineElectrodeSet = new Array();
+
+    var EMG_ELECTRODE_SIZE = 4;
+    var EDA_ELECTRODE_SIZE = 5;
+    var ECG_ELECTRODE_SIZE = 4;
+  </script>
+
+  <script src="//code.jquery.com/jquery-3.2.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.22/p5.min.js"></script>
+  <script src="js/libs/material.min.js"></script>
+  <script src="js/libs/nouislider.js"></script>
+  <script src="js/libs/sweetalert.min.js"></script>
+  <script src="js/libs/snap.svg.js"></script>
+  <script src="js/libs/FileSaver.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <!--    <script src="js/libs/sweetalert2.min.js"></script>-->
+  <!--    <link rel="stylesheet" href="css/sweetalert2.min.css"/>-->
+  <!-- Optional: include a polyfill for ES6 Promises for IE11 -->
+  <!--    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>-->
+
+
+  <script src="js/AnnealingClasses/SensorControls.js"></script>
+  <script src="js/AnnealingClasses/Renderer.js"></script>
+  <script src="js/AnnealingClasses/OptimizationSliderController.js"></script>
+  <script src="js/AnnealingClasses/Utils.js"></script>
+  <script src="js/AnnealingClasses/ForearmTrapezoidController.js"></script>
+  <script src="js/AnnealingClasses/StatusAreaController.js"></script>
+  <script src="js/AnnealingClasses/InputShapeController.js"></script>
+  <script src="js/AnnealingClasses/KeyPoint.js"></script>
+  <script src="js/AnnealingClasses/Electrode.js"></script>
+  <script src="js/AnnealingClasses/ECGElectrodeMap.js"></script>
+  <script src="js/AnnealingClasses/KeyPointCalculator.js"></script>
+  <script src="js/AnnealingClasses/ElectrodeLayoutGenerator.js"></script>
+  <script src="js/AnnealingClasses/ElectrodeLayout_Modifier.js"></script>
+  <script src="js/AnnealingClasses/ConveHullCalculator.js"></script>
+  <script src="js/AnnealingClasses/ConvexHullFixed.js"></script>
+  <script src="js/AnnealingClasses/EnergyCalculator.js"></script>
+  <script src="js/AnnealingClasses/ElectrodeLayout.js"></script>
+  <script src="js/AnnealingClasses/SA_Optimizer.js"></script>
+  <script src="js/AnnealingClasses/QualityPredictionPanelController.js"></script>
+
+  <style>
+    .swal-title {
+      margin: 0px;
+      font-size: 40px;
+      box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.21);
+      margin-bottom: 28px;
+      font-family: "Roboto Condensed";
+    }
+
+    .swal-text {
+      background-color: #FEFAE3;
+      padding: 17px;
+      font-size: 32px;
+      font-family: "Roboto Condensed";
+      border: 1px solid #F0E1A1;
+      display: block;
+      margin: 22px;
+      text-align: center;
+      color: #61534e;
+    }
+  </style>
+
+  <script>
+    //Plugin for Snap for getting the point coordinates while drawing with a mouse
+    Snap.plugin( function( Snap, Element, Paper, global ) {
+      Element.prototype.getCursorPoint = function( x, y ) {
+        var pt = this.paper.node.createSVGPoint();
+        pt.x = x; pt.y = y;
+        return pt.matrixTransform( this.paper.node.getScreenCTM().inverse());
+      }
+    });
+  </script>
+
+</head>
+
+
+<body>
+<header class="mdl-layout__header mdl-layout__header--waterfall">
+  <!-- Top row, always visible -->
+  <div class="mdl-layout__header-row">
+        <span class="mdl-layout-title">
+            <img src="icons/tool_icon_v1.png" style="display: inline-block;" height="60" width="150"> &nbsp;&nbsp;
+            <h1 style="font-family: 'Roboto Condensed'; color: #fefefe;  display: inline">Interactive Optimizer for Multi-Modal Sensors</h1>
+        </span>
+    <div class="mdl-layout-spacer"></div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                  mdl-textfield--floating-label mdl-textfield--align-right">
+
+      <div class="mdl-textfield__expandable-holder">
+        <input class="mdl-textfield__input" type="text" name="sample"
+               id="waterfall-exp">
+      </div>
+    </div>
+  </div>
+  <!-- Bottom row, not visible on scroll -->
+</header>
+
+<br/>
+
+<div class="row row-no-gutters">
+
+
+
+  <div class="col-sm-6">
+    <svg id="drawing" height="400mm" width="350mm" viewBox="0 0 350 400">
+    </svg>
+
+
+
+  </div>
+
+
+  <div class="col-sm-3">
+
+    <div class="demo-card-optimization_weights mdl-card mdl-shadow--2dp">
+
+
+
+
+
+    <button class="generate_btn" onclick="getSelectedElectrodes()">Generate </button>
+    <br/> <br/>
+
+    <button class="generate_btn">Generate For Shape</button>
+
+    <br/> <br/> <br/>
+
+
+
+
+  </div>
+
+
+</div>
+
+</div>
+
+
+
+<script>
+
+  var MAIN_CANVAS_SVG_WIDTH = 400;
+  var MAIN_CANVAS_SVG_HEIGHT = 400;
+  var EMG_ELECTRODE_SIZE = 2.5;
+  main_canvas = document.getElementById("drawing");
+  main_canvas = Snap(main_canvas);
+  Renderer.RenderGridWithLines(main_canvas);
+
+  var electrodeArray = new Array();
+  var selectedElectrodes = new Array();
+
+  var begin_x = 100; var begin_y = 100;
+
+  var NUM_ROWS = 8;
+  var NUM_COLUMNS = 24;
+  var INTER_ELECTRODE_DISTANCE = 10;
+  var electrodeID = 1;
+
+
+  for (let i = 0; i < NUM_ROWS ; i++) {
+    for (let j = 0; j < NUM_COLUMNS; j++) {
+      console.log("Hello World!");
+      var electrode = new Electrode(begin_x + (j * INTER_ELECTRODE_DISTANCE), begin_y + (i * INTER_ELECTRODE_DISTANCE), EMG_ELECTRODE_SIZE, Math.PI * EMG_ELECTRODE_SIZE * EMG_ELECTRODE_SIZE, "EMG", "circle", electrodeID)
+      electrodeArray.push(electrode);
+      electrodeID++;
+    }
+  }
+
+  function getSelectedElectrodes(){
+    selectedElectrodes = Utils.GetElectrodesWithinShape(electrodeArray, inputPath);
+    for(let i = 0 ; i < selectedElectrodes.length; i++){
+      console.log(selectedElectrodes[i].id)
+    }
+  }
+
+
+
+  Renderer.RenderAllElectrodes(electrodeArray, main_canvas);
+
+</script>
+
+<script>
+
+
+</script>
+
+
+
+
+
+<script>
+
+
+  var mouse_down_state = false;
+  var sketchedPointArray = new Array();
+  var inputPath = new Array();
+  var cursor, drawn_shape, handleGroup;
+  var dragging = 0;
+
+  var input_shape_enabled = false;
+
+  main_canvas.mousedown(function (ev, x, y) {
+    // if(input_shape_enabled){
+    var cpt;
+    var point;
+    mouse_down_state = true;
+    cpt = main_canvas.getCursorPoint(x,y);
+    if(cursor == null){
+      cursor = main_canvas.circle(cpt.x, cpt.y ,2).attr({ fill: "blue" });
+      sketchedPointArray.push(cpt.x, cpt.y);
+      inputPath.push([cpt.x, cpt.y]);
+    }
+
+
+
+    // }
+
+  });
+
+  main_canvas.mousemove(function (ev, x, y) {
+    var cpt;
+    var point;
+
+    if(mouse_down_state ==true){
+      cpt = main_canvas.getCursorPoint(x,y);
+      sketchedPointArray.push(cpt.x, cpt.y);
+      inputPath.push([cpt.x, cpt.y]);
+      cursor.attr({cx:cpt.x, cy:cpt.y});
+    }
+
+
+  });
+
+  main_canvas.mouseup(function (ev, x,y) {
+    mouse_down_state = false;
+    InputShapeController.SetShapeCoords(sketchedPointArray);
+    InputShapeController.SetInputShapeType("free-form");
+    InputShapeController.RenderInputShape(main_canvas,"free-form");
+    //InputShapeController.SetShapeInputFields(InputShapeController.GetShapeSVG());
+
+    console.log(sketchedPointArray);
+
+
+  });
+
+</script>
+
+
+</body>
+
+
+</html>

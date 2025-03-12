@@ -96,6 +96,14 @@
   <script src="js/AnnealingClasses/ElectrodeLayout.js"></script>
   <script src="js/AnnealingClasses/SA_Optimizer.js"></script>
   <script src="js/AnnealingClasses/QualityPredictionPanelController.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script type="importmap">
+    {
+      "imports": {
+        "@material/web/": "https://esm.run/@material/web/"
+      }
+    }
+  </script>
 
   <style>
     .swal-title {
@@ -129,6 +137,22 @@
       }
     });
   </script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <script type="module">
+    import '@material/web/all.js';
+    import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
+
+    document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
+  </script>
+  <style>
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+  </style>
 
 </head>
 
@@ -158,7 +182,33 @@
 
 <div class="row row-no-gutters">
 
+<div class="col-sm-3">
+  <div class="demo-card-shape-customization mdl-card mdl-shadow--2dp">
+    <h1  style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Dataset</h1>
 
+    <div class="mdl-card__actions mdl-card--border">
+<!--      <h2 style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Dataset</h2>-->
+      <h3><label for="emg_datasets" style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Choose a Dataset &nbsp;  </label>
+
+      <select name="emg_datasets" id="emg_datasets">
+        <option value="hd-sEMG">hd-sEMG</option>
+        <option value="saab">Saab</option>
+        <option value="mercedes">Mercedes</option>
+        <option value="audi">Audi</option>
+      </select></h3>
+
+      <br/>
+
+      <h3 style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Electrode Density: </h3>
+
+
+
+      <br> <br/>
+
+    </div>
+
+  </div>
+</div>
 
   <div class="col-sm-6">
     <svg id="drawing" height="400mm" width="350mm" viewBox="0 0 350 400">
@@ -171,12 +221,6 @@
 
   <div class="col-sm-3">
 
-    <div class="demo-card-optimization_weights mdl-card mdl-shadow--2dp">
-
-
-
-
-
     <button class="generate_btn" onclick="getSelectedElectrodes()">Generate </button>
     <br/> <br/>
 
@@ -184,13 +228,7 @@
 
     <br/> <br/> <br/>
 
-
-
-
   </div>
-
-
-</div>
 
 </div>
 

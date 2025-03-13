@@ -51,6 +51,7 @@
   <script>
     //Declare all the Global Variables here
     var main_canvas;
+    var gesture_canvas;
     var forearmTrapezoidPoints = new Array();
     var forearmProperties = new Array();
     var keyPointSet = new Array();
@@ -191,19 +192,27 @@
       <h3><label for="emg_datasets" style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Choose a Dataset &nbsp;  </label>
 
       <select name="emg_datasets" id="emg_datasets">
+        <option value="none"> </option>
         <option value="hd-sEMG">hd-sEMG</option>
         <option value="saab">Saab</option>
         <option value="mercedes">Mercedes</option>
         <option value="audi">Audi</option>
       </select></h3>
 
+
       <br/>
 
-      <h3 style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Electrode Density: </h3>
-
+      <h3 style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Electrode Density: 192</h3>
 
 
       <br> <br/>
+      <h3 style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Gestures </h3>
+
+      <br> <br/>
+      <svg id="gesture_canvas" height="50mm" width="110mm" viewBox="0 0 60 110">
+      </svg>
+      <br> <br/>
+
 
     </div>
 
@@ -239,9 +248,14 @@
   var MAIN_CANVAS_SVG_WIDTH = 400;
   var MAIN_CANVAS_SVG_HEIGHT = 400;
   var EMG_ELECTRODE_SIZE = 2.5;
+
+
   main_canvas = document.getElementById("drawing");
   main_canvas = Snap(main_canvas);
   Renderer.RenderGridWithLines(main_canvas);
+
+  gesture_canvas = document.getElementById("gesture_canvas")
+  gesture_canvas = Snap(gesture_canvas);
 
   var electrodeArray = new Array();
   var selectedElectrodes = new Array();

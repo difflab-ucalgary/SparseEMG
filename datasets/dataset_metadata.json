@@ -1,0 +1,147 @@
+{
+"dataset_name": "CSL-HDEMG",
+"author_name": "Christoph Amma, Thomas Krings, Jonas Böer, Tanja Schultz",
+"link_to_dataset": "http://www.csl.uni-bremen.de/cms/forschung/bewegungserkennung",
+"publication_venue": "In Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems",
+"publication_venue_short": "ACM CHI 2015",
+"year": 2015,
+"number_of_electrodes": 192,
+"electrode_size": "5mm",
+"electrode_spacing": "10mm",
+"number_of_rows": 8,
+"number_of_columns": 24,
+"number_of_gestures": 29,
+"gesture_classes": [
+{
+"class_name": "Class 1",
+"gestures": [
+{
+"gesture_name": "Fist",
+"illustration": "./datasets//fist.png"
+},
+{
+"gesture_name": "Open Hand",
+"illustration": "illustrations/open_hand.png"
+},
+{
+"gesture_name": "Wave In",
+"illustration": "illustrations/wave_in.png"
+},
+{
+"gesture_name": "Wave Out",
+"illustration": "illustrations/wave_out.png"
+},
+{
+"gesture_name": "Pinch",
+"illustration": "illustrations/pinch.png"
+},
+{
+"gesture_name": "Point",
+"illustration": "illustrations/point.png"
+},
+{
+"gesture_name": "Thumbs Up",
+"illustration": "illustrations/thumbs_up.png"
+},
+{
+"gesture_name": "Thumbs Down",
+"illustration": "illustrations/thumbs_down.png"
+}
+]
+},
+{
+"class_name": "Class 2",
+"gestures": [
+{
+"gesture_name": "Swipe Left",
+"illustration": "illustrations/swipe_left.png"
+},
+{
+"gesture_name": "Swipe Right",
+"illustration": "illustrations/swipe_right.png"
+},
+{
+"gesture_name": "Swipe Up",
+"illustration": "illustrations/swipe_up.png"
+},
+{
+"gesture_name": "Swipe Down",
+"illustration": "illustrations/swipe_down.png"
+},
+{
+"gesture_name": "Rotate Clockwise",
+"illustration": "illustrations/rotate_clockwise.png"
+},
+{
+"gesture_name": "Rotate Counterclockwise",
+"illustration": "illustrations/rotate_counterclockwise.png"
+},
+{
+"gesture_name": "Tap",
+"illustration": "illustrations/tap.png"
+},
+{
+"gesture_name": "Double Tap",
+"illustration": "illustrations/double_tap.png"
+},
+{
+"gesture_name": "Hold",
+"illustration": "illustrations/hold.png"
+},
+{
+"gesture_name": "Release",
+"illustration": "illustrations/release.png"
+}
+]
+},
+{
+"class_name": "Class 3",
+"gestures": [
+{
+"gesture_name": "Spread Fingers",
+"illustration": "illustrations/spread_fingers.png"
+},
+{
+"gesture_name": "Close Fingers",
+"illustration": "illustrations/close_fingers.png"
+},
+{
+"gesture_name": "Wave",
+"illustration": "illustrations/wave.png"
+},
+{
+"gesture_name": "Clap",
+"illustration": "illustrations/clap.png"
+},
+{
+"gesture_name": "Snap",
+"illustration": "illustrations/snap.png"
+},
+{
+"gesture_name": "Flick",
+"illustration": "illustrations/flick.png"
+},
+{
+"gesture_name": "Shake",
+"illustration": "illustrations/shake.png"
+},
+{
+"gesture_name": "Twist",
+"illustration": "illustrations/twist.png"
+},
+{
+"gesture_name": "Push",
+"illustration": "illustrations/push.png"
+},
+{
+"gesture_name": "Pull",
+"illustration": "illustrations/pull.png"
+},
+{
+"gesture_name": "Rotate",
+"illustration": "illustrations/rotate.png"
+}
+]
+}
+]
+}

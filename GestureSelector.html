@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clickable Images on Canvas</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+    .highlight {
+      border: 2px solid red;
+    }
+  </style>
+</head>
+<body>
+<canvas id="myCanvas" width="800" height="600"></canvas>
+<script>
+  const canvas = document.getElementById('myCanvas');
+  const ctx = canvas.getContext('2d');
+  Positions = [];
+  const imageObjects = [];
+  const imagePositions = [];
+
+  function loadImages() {
+    fetch('./datasets/dataset_metadata.json')
+      .then(response => response.json())
+      .then(images => {
+        let loadedImages = 0;
+        images.forEach((image, index) => {
+          const img = new Image();
+          img.src = image.src;
+          img.onload = () => {
+            imageObjects[index] = img;
+            imagePositions[index] = { x: image.x, y: image.y, width: image.width, height: image.height};
+            loadedImages++;
+            if (loadedImages === images.length) {
+              drawImages();
+            }
+          };
+        });
+      });
+  }
+
+  function drawImages() {
+    imageObjects.forEach((img, index) => {
+      const pos = imagePositions[index];
+      ctx.drawImage(img, pos.x, pos.y);
+    });
+  }
+
+  canvas.addEventListener('click', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    imagePositions.forEach((pos, index) => {
+      if (x > pos.x && x < pos.x + pos.width && y > pos.y && y < pos.y + pos.height) {
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(pos.x, pos.y, pos.width, pos.height);
+        Console.log(`Image ${in

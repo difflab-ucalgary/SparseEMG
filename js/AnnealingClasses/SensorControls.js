@@ -52,7 +52,7 @@ var SensorControls = (function () {
     }
 
     function getSensorChannels() {
-        var numEMGChannels = StatusAreaController.GetNumSelectedMuscles();
+        var numEMGChannels = GestureSelector.GetNumSelectedMuscles();
         var numEDAChannels, numECGChannels;
         if(eda_enabled == true){
             numEDAChannels = 1;

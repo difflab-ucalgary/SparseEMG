@@ -27,13 +27,14 @@
  */
 
 
-/* This class handles the selection of muscles in "Muscle Selection" area. The muscles can toggled on/off
+/* This class handles the selection of gesture in "Gesture Selection" area. The gestures can toggled on/off
 *  by clicking on them. The click events are handled and the corresponding muscles are toggled on/off through this
 *  class.
 * */
 
 
-var StatusAreaController = ( function(){
+
+var GestureSelector = ( function(){
 
     var status_area_canvas, status_area;
     var emg_quality_bar, eda_quality_bar, ecg_quality_bar;
@@ -51,15 +52,15 @@ var StatusAreaController = ( function(){
         console.log("Initializing Status Area!!");
         status_area_canvas = Snap("#status_canvas");
         status_area_canvas.clear();
-        status_area = Snap.load("./resources/muscle_selection_v1.svg", function (loadedFragment) {
+        status_area = Snap.load("./amma-chi15-dataset.svg", function (loadedFragment) {
             // emg_quality_bar = loadedFragment.select("#emg_quality_bar");
             // emg_quality_bar.attr({width:"40"});
 
-            brachioradialis_muscle = loadedFragment.select('#Brachiordialis_copy *');
-            fcr_muscle = loadedFragment.select('#fcr_muscle *');
-            pl_muscle = loadedFragment.select('#palmaris_longus *');
-            pq_muscle = loadedFragment.select('#pronator_quadratus');
-            fcu_muscle = loadedFragment.select('#fcu_muscle');
+            brachioradialis_muscle = loadedFragment.select('#tap_set_g0 *');
+            // fcr_muscle = loadedFragment.select('#fcr_muscle *');
+            // pl_muscle = loadedFragment.select('#palmaris_longus *');
+            // pq_muscle = loadedFragment.select('#pronator_quadratus');
+            // fcu_muscle = loadedFragment.select('#fcu_muscle');
 
             console.log(pl_muscle);
 
@@ -70,13 +71,13 @@ var StatusAreaController = ( function(){
                 console.log(br_muscle_selected);
                 if(br_muscle_selected == true){
                     console.log("BR muscle is selected!!!");
-                    loadedFragment.selectAll('#Brachiordialis_copy *').attr({ stroke: '#22ff69' });
+                    loadedFragment.selectAll('#tap_set_g0 *').attr({ stroke: '#22ff69' });
                     selected_muscle_groups[1] = true;
                     emgToggle.checked = true;
                     document.getElementById("num_selected_muscles_label").innerText = "Muscles Selected: " + getNumSelectedMuscles();
                 }else{
                     console.log("BR muscle is de-selected!!!");
-                    loadedFragment.selectAll('#Brachiordialis_copy *').attr({ stroke: '#00a4a7' });
+                    loadedFragment.selectAll('#tap_set_g0 *').attr({ stroke: '#00a4a7' });
                     selected_muscle_groups[1] = false;
                     console.log(getNumSelectedMuscles());
                     if(getNumSelectedMuscles() == 0){

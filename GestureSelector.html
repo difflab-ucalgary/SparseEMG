@@ -3,59 +3,158 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clickable Images on Canvas</title>
+  <title>EMG Dataset Viewer</title>
+  <link rel="shortcut icon" type="image/x-icon" href="icons/title_icon_64x64.png" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="css/material_and_icons.css"/>
+  <link rel="stylesheet" href="css/material.indigo-pink.min.css"/>
+  <link rel="stylesheet" href="css/bootstrap3.3.7.min.css"/>
+  <link rel="stylesheet" href="css/nouislider.css"/>
+
+  <link rel="stylesheet" href="css/default.css"/>
+  <link rel="stylesheet" href="css/material_design_cards.css"/>
+  <link rel="stylesheet" href="css/mdl_expansion_cards.css"/>
+  <link rel="stylesheet" href="css/generate_button_styling.css"/>
+
   <style>
-    canvas {
-      border: 1px solid black;
+    .gesture-class {
+      margin-bottom: 20px;
     }
-    .highlight {
-      border: 2px solid red;
+
+    .gesture-class h2 {
+      margin-bottom: 10px;
+    }
+    .gesture-row {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .gesture {
+      margin-right: 10px;
+      text-align: center;
+    }
+    .gesture img {
+      width: 100px;
+      height: 100px;
+    }
+    .gesture img.selected {
+      border-color: blue;
+    }
+    h2{
+      font-family: 'Roboto Condensed';
+      color: rgb(64,64,64);
+      display: inline;
     }
   </style>
+
 </head>
 <body>
-<canvas id="myCanvas" width="800" height="600"></canvas>
-<script>
-  const canvas = document.getElementById('myCanvas');
-  const ctx = canvas.getContext('2d');
-  Positions = [];
-  const imageObjects = [];
-  const imagePositions = [];
+<header class="mdl-layout__header mdl-layout__header--waterfall">
+  <!-- Top row, always visible -->
+  <div class="mdl-layout__header-row">
+        <span class="mdl-layout-title">
+            <img src="icons/tool_icon_v1.png" style="display: inline-block;" height="60" width="150"> &nbsp;&nbsp;
+            <h1 style="font-family: 'Roboto Condensed'; color: #fefefe;  display: inline">SparseEMG</h1>
+        </span>
+    <div class="mdl-layout-spacer"></div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                  mdl-textfield--floating-label mdl-textfield--align-right">
 
-  function loadImages() {
-    fetch('./datasets/dataset_metadata.json')
+      <div class="mdl-textfield__expandable-holder">
+        <input class="mdl-textfield__input" type="text" name="sample"
+               id="waterfall-exp">
+      </div>
+    </div>
+  </div>
+  <!-- Bottom row, not visible on scroll -->
+</header>
+
+<br/>
+
+<div class="demo-card-shape-customization mdl-card mdl-shadow--2dp">
+  <h1  style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Dataset</h1>
+
+<h1>Select EMG Dataset</h1>
+<select id="datasetSelect">
+  <option value="">Select a dataset</option>
+  <option value="CSL-HDEMG">CSL-HDEMG</option>
+  <option value="Dataset2">Dataset2</option>
+  <option value="Dataset3">Dataset3</option>
+  <option value="Dataset4">Dataset4</option>
+  <option value="Dataset5">Dataset 5</option>
+</select>
+
+  <div id="gesture-container"></div>
+</div>
+<script>
+
+  var dataset_gestures = new Array();
+
+  document.getElementById('datasetSelect').addEventListener('change', function() {
+    const selectedDataset = this.value;
+    if (selectedDataset === 'CSL-HDEMG') {
+      loadDataset('./datasets/CSL-HDEMG/dataset_metadata.json');
+    }
+  });
+
+  function loadDataset(jsonFile) {
+    fetch(jsonFile)
       .then(response => response.json())
-      .then(images => {
-        let loadedImages = 0;
-        images.forEach((image, index) => {
-          const img = new Image();
-          img.src = image.src;
-          img.onload = () => {
-            imageObjects[index] = img;
-            imagePositions[index] = { x: image.x, y: image.y, width: image.width, height: image.height};
-            loadedImages++;
-            if (loadedImages === images.length) {
-              drawImages();
-            }
-          };
-        });
+      .then(data => {
+        renderGestureImages(data);
       });
   }
 
-  function drawImages() {
-    imageObjects.forEach((img, index) => {
-      const pos = imagePositions[index];
-      ctx.drawImage(img, pos.x, pos.y);
+
+
+
+  function renderGestureImages(data) {
+    const container = document.getElementById('gesture-container');
+
+    data.gesture_classes.forEach(gestureClass => {
+      const classDiv = document.createElement('div');
+      classDiv.className = 'gesture-class';
+
+      const classTitle = document.createElement('h2');
+      classTitle.textContent = gestureClass.class_name;
+      classDiv.appendChild(classTitle);
+
+      let gestureRow = document.createElement('div');
+      gestureRow.className = 'gesture-row';
+
+      gestureClass.gestures.forEach((gesture, index) => {
+        if (index > 0 && index % 5 === 0) {
+          classDiv.appendChild(gestureRow);
+          gestureRow = document.createElement('div');
+          gestureRow.className = 'gesture-row';
+        }
+
+        const gestureDiv = document.createElement('div');
+        gestureDiv.className = 'gesture';
+
+        const gestureImg = document.createElement('img');
+        gestureImg.src = gesture.illustration;
+        gestureImg.alt = gesture.gesture_name;
+        gestureImg.addEventListener('click', () => {
+          dataset_gestures.gesture_name = gesture.gesture_name;
+          dataset_gestures.selected = !dataset_gestures.selected;
+          console.log(dataset_gestures.gesture_name + dataset_gestures.selected);
+        });
+        gestureDiv.appendChild(gestureImg);
+
+        const gestureName = document.createElement('p');
+        gestureName.textContent = gesture.gesture_name;
+        gestureDiv.appendChild(gestureName);
+
+        gestureRow.appendChild(gestureDiv);
+      });
+
+      classDiv.appendChild(gestureRow);
+      container.appendChild(classDiv);
     });
   }
 
-  canvas.addEventListener('click', (event) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    imagePositions.forEach((pos, index) => {
-      if (x > pos.x && x < pos.x + pos.width && y > pos.y && y < pos.y + pos.height) {
-        ctx.strokeStyle = 'red';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(pos.x, pos.y, pos.width, pos.height);
-        Console.log(`Image ${in
+
+</script>
+</body>
+</html>

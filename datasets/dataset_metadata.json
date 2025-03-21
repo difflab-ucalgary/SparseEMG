@@ -13,135 +13,135 @@
 "number_of_gestures": 29,
 "gesture_classes": [
 {
-"class_name": "Class 1",
+"class_name": "Tap Set",
 "gestures": [
 {
-"gesture_name": "Fist",
-"illustration": "./datasets//fist.png"
+"gesture_name": "Gesture 0_0",
+"illustration": "./datasets/CSL-HDEMG/gesture0_0.svg"
 },
 {
-"gesture_name": "Open Hand",
-"illustration": "illustrations/open_hand.png"
+"gesture_name": "Gesture 0_1",
+"illustration": "./datasets/CSL-HDEMG/gesture0_1.svg"
 },
 {
-"gesture_name": "Wave In",
-"illustration": "illustrations/wave_in.png"
+"gesture_name": "Gesture 0_2",
+"illustration": "./datasets/CSL-HDEMG/gesture0_2.svg"
 },
 {
-"gesture_name": "Wave Out",
-"illustration": "illustrations/wave_out.png"
+"gesture_name": "Gesture 0_3",
+"illustration": "./datasets/CSL-HDEMG/gesture0_3.svg"
 },
 {
-"gesture_name": "Pinch",
-"illustration": "illustrations/pinch.png"
+"gesture_name": "Gesture 0_4",
+"illustration": "./datasets/CSL-HDEMG/gesture0_4.svg"
 },
 {
-"gesture_name": "Point",
-"illustration": "illustrations/point.png"
+"gesture_name": "Gesture 0_5",
+"illustration": "./datasets/CSL-HDEMG/gesture0_5.svg"
 },
 {
-"gesture_name": "Thumbs Up",
-"illustration": "illustrations/thumbs_up.png"
+"gesture_name": "Gesture 0_6",
+"illustration": "./datasets/CSL-HDEMG/gesture0_6.svg"
 },
 {
-"gesture_name": "Thumbs Down",
-"illustration": "illustrations/thumbs_down.png"
+"gesture_name": "Gesture 0_7",
+"illustration": "./datasets/CSL-HDEMG/gesture0_7.svg"
 }
 ]
 },
 {
-"class_name": "Class 2",
-"gestures": [
-{
-"gesture_name": "Swipe Left",
-"illustration": "illustrations/swipe_left.png"
+"class_name": "Bend Set",
+  "gestures": [
+    {
+      "gesture_name": "Gesture 1_0",
+      "illustration": "./datasets/CSL-HDEMG/gesture1_0.svg"
+    },
+    {
+      "gesture_name": "Gesture 1_1",
+      "illustration": "./datasets/CSL-HDEMG/gesture1_1.svg"
+    },
+    {
+      "gesture_name": "Gesture 1_2",
+      "illustration": "./datasets/CSL-HDEMG/gesture1_2.svg"
+    },
+    {
+      "gesture_name": "Gesture 1_3",
+      "illustration": "./datasets/CSL-HDEMG/gesture1_3.svg"
+    },
+    {
+      "gesture_name": "Gesture 1_4",
+      "illustration": "./datasets/CSL-HDEMG/gesture1_4.svg"
+    },
+    {
+      "gesture_name": "Gesture 1_5",
+      "illustration": "./datasets/CSL-HDEMG/gesture1_5.svg"
+    },
+    {
+      "gesture_name": "Gesture 1_6",
+      "illustration": "./datasets/CSL-HDEMG/gesture1_6.svg"
+    },
+    {
+      "gesture_name": "Gesture 1_7",
+      "illustration": "./datasets/CSL-HDEMG/gesture1_7.svg"
+    },
+    {
+      "gesture_name": "Gesture 1_8",
+      "illustration": "./datasets/CSL-HDEMG/gesture1_8.svg"
+    },
+    {
+      "gesture_name": "Gesture 1_9",
+      "illustration": "./datasets/CSL-HDEMG/gesture1_9.svg"
+    }
+  ]
 },
 {
-"gesture_name": "Swipe Right",
-"illustration": "illustrations/swipe_right.png"
-},
-{
-"gesture_name": "Swipe Up",
-"illustration": "illustrations/swipe_up.png"
-},
-{
-"gesture_name": "Swipe Down",
-"illustration": "illustrations/swipe_down.png"
-},
-{
-"gesture_name": "Rotate Clockwise",
-"illustration": "illustrations/rotate_clockwise.png"
-},
-{
-"gesture_name": "Rotate Counterclockwise",
-"illustration": "illustrations/rotate_counterclockwise.png"
-},
-{
-"gesture_name": "Tap",
-"illustration": "illustrations/tap.png"
-},
-{
-"gesture_name": "Double Tap",
-"illustration": "illustrations/double_tap.png"
-},
-{
-"gesture_name": "Hold",
-"illustration": "illustrations/hold.png"
-},
-{
-"gesture_name": "Release",
-"illustration": "illustrations/release.png"
-}
-]
-},
-{
-"class_name": "Class 3",
-"gestures": [
-{
-"gesture_name": "Spread Fingers",
-"illustration": "illustrations/spread_fingers.png"
-},
-{
-"gesture_name": "Close Fingers",
-"illustration": "illustrations/close_fingers.png"
-},
-{
-"gesture_name": "Wave",
-"illustration": "illustrations/wave.png"
-},
-{
-"gesture_name": "Clap",
-"illustration": "illustrations/clap.png"
-},
-{
-"gesture_name": "Snap",
-"illustration": "illustrations/snap.png"
-},
-{
-"gesture_name": "Flick",
-"illustration": "illustrations/flick.png"
-},
-{
-"gesture_name": "Shake",
-"illustration": "illustrations/shake.png"
-},
-{
-"gesture_name": "Twist",
-"illustration": "illustrations/twist.png"
-},
-{
-"gesture_name": "Push",
-"illustration": "illustrations/push.png"
-},
-{
-"gesture_name": "Pull",
-"illustration": "illustrations/pull.png"
-},
-{
-"gesture_name": "Rotate",
-"illustration": "illustrations/rotate.png"
-}
-]
+"class_name": "Multi-Finger Set",
+  "gestures": [
+    {
+      "gesture_name": "Gesture 2_0",
+      "illustration": "./datasets/CSL-HDEMG/gesture2_0.svg"
+    },
+    {
+      "gesture_name": "Gesture 2_1",
+      "illustration": "./datasets/CSL-HDEMG/gesture2_1.svg"
+    },
+    {
+      "gesture_name": "Gesture 2_2",
+      "illustration": "./datasets/CSL-HDEMG/gesture2_2.svg"
+    },
+    {
+      "gesture_name": "Gesture 2_3",
+      "illustration": "./datasets/CSL-HDEMG/gesture2_3.svg"
+    },
+    {
+      "gesture_name": "Gesture 2_4",
+      "illustration": "./datasets/CSL-HDEMG/gesture2_4.svg"
+    },
+    {
+      "gesture_name": "Gesture 2_5",
+      "illustration": "./datasets/CSL-HDEMG/gesture2_5.svg"
+    },
+    {
+      "gesture_name": "Gesture 2_6",
+      "illustration": "./datasets/CSL-HDEMG/gesture2_6.svg"
+    },
+    {
+      "gesture_name": "Gesture 2_7",
+      "illustration": "./datasets/CSL-HDEMG/gesture2_7.svg"
+    },
+    {
+      "gesture_name": "Gesture 2_8",
+      "illustration": "./datasets/CSL-HDEMG/gesture2_8.svg"
+    },
+    {
+      "gesture_name": "Gesture 2_9",
+      "illustration": "./datasets/CSL-HDEMG/gesture2_9.svg"
+    },
+    {
+      "gesture_name": "Gesture 2_10",
+      "illustration": "./datasets/CSL-HDEMG/gesture2_10.svg"
+    }
+  ]
 }
 ]
 }

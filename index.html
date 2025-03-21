@@ -1,11 +1,11 @@
 <!--
 /*
-* Copyright (c) 2020.
+* Copyright (c) 2025.
 *
 *  MIT License
 *
-*  Copyright (c) 2020 Aditya Nittala
-*  Affiliation: Saarland University, Germany
+*  Copyright (c) 2025 Aditya Nittala
+*  Affiliation: University of Calgary, Canada
 *
 *  Permission is hereby granted, free of charge, to any person obtaining a copy
 *  of this software and associated documentation files (the "Software"), to deal
@@ -164,7 +164,7 @@
   <div class="mdl-layout__header-row">
         <span class="mdl-layout-title">
             <img src="icons/tool_icon_v1.png" style="display: inline-block;" height="60" width="150"> &nbsp;&nbsp;
-            <h1 style="font-family: 'Roboto Condensed'; color: #fefefe;  display: inline">Interactive Optimizer for Multi-Modal Sensors</h1>
+            <h1 style="font-family: 'Roboto Condensed'; color: #fefefe;  display: inline">SparseEMG</h1>
         </span>
     <div class="mdl-layout-spacer"></div>
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
@@ -191,7 +191,7 @@
 <!--      <h2 style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Dataset</h2>-->
       <h3><label for="emg_datasets" style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Choose a Dataset &nbsp;  </label>
 
-      <select name="emg_datasets" id="emg_datasets">
+      <select name="emg_datasets" id="emg_datasets" onchange="get_selected_dataset()">
         <option value="none"> </option>
         <option value="hd-sEMG">hd-sEMG</option>
         <option value="saab">Saab</option>
@@ -202,14 +202,14 @@
 
       <br/>
 
-      <h3 style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Electrode Density: 192</h3>
+      <h3 id="dataset_dimensions" style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Electrode Density: </h3>
 
 
       <br> <br/>
       <h3 style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Gestures </h3>
 
       <br> <br/>
-      <svg id="gesture_canvas" height="50mm" width="110mm" viewBox="0 0 60 110">
+      <svg id="gesture_canvas" height="190mm" width="140mm" viewBox="0 0 140 190">
       </svg>
       <br> <br/>
 
@@ -249,6 +249,7 @@
   var MAIN_CANVAS_SVG_HEIGHT = 400;
   var EMG_ELECTRODE_SIZE = 2.5;
 
+  var emg_dataset;
 
   main_canvas = document.getElementById("drawing");
   main_canvas = Snap(main_canvas);
@@ -291,7 +292,19 @@
 </script>
 
 <script>
+function get_selected_dataset(){
+  var selected_dataset = document.getElementById("emg_datasets").value;
+  if(selected_dataset == 'hd-sEMG'){
+    console.log(selected_dataset);
+    document.getElementById("dataset_dimensions").innerHTML = "Electrode Density: 8 (rows) x 24 (columns) = 192";
 
+    gesture_canvas = Snap("#gesture_canvas")
+    var status_area = Snap.load("./amma-chi15-dataset.svg", function ( loadedFragment ){
+      gesture_canvas.append( loadedFragment );
+    });
+
+  }
+}
 
 </script>
 

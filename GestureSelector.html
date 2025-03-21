@@ -47,6 +47,33 @@
     }
   </style>
 
+  <script>
+    //Plugin for Snap for getting the point coordinates while drawing with a mouse
+    Snap.plugin( function( Snap, Element, Paper, global ) {
+      Element.prototype.getCursorPoint = function( x, y ) {
+        var pt = this.paper.node.createSVGPoint();
+        pt.x = x; pt.y = y;
+        return pt.matrixTransform( this.paper.node.getScreenCTM().inverse());
+      }
+    });
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <script type="module">
+    import '@material/web/all.js';
+    import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
+
+    document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
+  </script>
+  <style>
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+  </style>
+
 </head>
 <body>
 <header class="mdl-layout__header mdl-layout__header--waterfall">
@@ -70,22 +97,40 @@
 </header>
 
 <br/>
-
+<div class="row row-no-gutters">
+  <div class="col-sm-3">
 <div class="demo-card-shape-customization mdl-card mdl-shadow--2dp">
-  <h1  style="font-family: 'Roboto Condensed'; color: rgb(255,255,255); display: inline">Dataset</h1>
 
 <h1>Select EMG Dataset</h1>
-<select id="datasetSelect">
+<h3><select id="datasetSelect">
   <option value="">Select a dataset</option>
   <option value="CSL-HDEMG">CSL-HDEMG</option>
   <option value="Dataset2">Dataset2</option>
   <option value="Dataset3">Dataset3</option>
   <option value="Dataset4">Dataset4</option>
   <option value="Dataset5">Dataset 5</option>
-</select>
+</select></h3>
 
   <div id="gesture-container"></div>
+  </div>
+  </div>
+<div class="col-sm-6">
+  <svg id="drawing" height="400mm" width="350mm" viewBox="0 0 350 400">
+  </svg>
+
 </div>
+  <div class="col-sm-3">
+
+    <button class="generate_btn" onclick="getSelectedElectrodes()">Generate </button>
+    <br/> <br/>
+
+    <button class="generate_btn">Generate For Shape</button>
+
+    <br/> <br/> <br/>
+
+  </div>
+</div>
+
 <script>
 
   var dataset_gestures = new Array();

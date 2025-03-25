@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="css/material.indigo-pink.min.css"/>
   <link rel="stylesheet" href="css/bootstrap3.3.7.min.css"/>
   <link rel="stylesheet" href="css/nouislider.css"/>
+  <script src="js/libs/snap.svg.js"></script>
 
   <link rel="stylesheet" href="css/default.css"/>
   <link rel="stylesheet" href="css/material_design_cards.css"/>
@@ -18,6 +19,10 @@
   <link rel="stylesheet" href="css/generate_button_styling.css"/>
 
   <style>
+    body {
+      zoom: 0.6;
+    }
+
     .gesture-class {
       margin-bottom: 20px;
     }
@@ -59,12 +64,6 @@
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <script type="module">
-    import '@material/web/all.js';
-    import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
-
-    document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
-  </script>
   <style>
     form {
       display: flex;
@@ -113,9 +112,12 @@
   <option value="Dataset5">Dataset 5</option>
 </select></h3>
   <br/>
+  <div id="dataset-details"></div>
   <div id="gesture-container"></div>
   </div>
   </div>
+
+
 <div class="col-sm-6">
   <svg id="drawing" height="400mm" width="350mm" viewBox="0 0 350 400">
   </svg>
@@ -148,17 +150,31 @@
     fetch(jsonFile)
       .then(response => response.json())
       .then(data => {
+        console.log(data.number_of_gestures);
+        renderDatasetDetails(data);
         renderGestureImages(data);
       });
   }
 
 
+  function renderDatasetDetails(data){
+    const container = document.getElementById('gesture-container');
 
+    const classDiv = document.createElement('div');
+    classDiv.className = 'dataset-details';
+
+    const classTitle = document.createElement('h2');
+    classTitle.textContent = "Dataset Name: " + data.dataset_name;
+    classDiv.appendChild(classTitle);
+    //classDiv.appendChild(gestureRow);
+    container.appendChild(classDiv);
+
+  }
 
   function renderGestureImages(data) {
     const container = document.getElementById('gesture-container');
-
     data.gesture_classes.forEach(gestureClass => {
+      var i =0 ;
       const classDiv = document.createElement('div');
       classDiv.className = 'gesture-class';
 
@@ -182,10 +198,18 @@
         const gestureImg = document.createElement('img');
         gestureImg.src = gesture.illustration;
         gestureImg.alt = gesture.gesture_name;
+        dataset_gestures.push({'gesture_name': gesture.gesture_name, 'selected' : false});
         gestureImg.addEventListener('click', () => {
-          dataset_gestures.gesture_name = gesture.gesture_name;
-          dataset_gestures.selected = !dataset_gestures.selected;
-          console.log(dataset_gestures.gesture_name + dataset_gestures.selected);
+          console.log("gesture clicked");
+          let index = dataset_gestures.findIndex(item => item['gesture_name'] === gesture.gesture_name);
+          if(dataset_gestures[index].selected == false){
+            gestureImg.style.border = '3px solid green';
+            dataset_gestures[index].selected = true;
+          }else{
+            gestureImg.style.border = '0px solid blue';
+            dataset_gestures[index].selected = false;
+          }
+
         });
         gestureDiv.appendChild(gestureImg);
 
@@ -194,10 +218,12 @@
         gestureDiv.appendChild(gestureName);
 
         gestureRow.appendChild(gestureDiv);
+        i++;
       });
 
       classDiv.appendChild(gestureRow);
       container.appendChild(classDiv);
+      console.log(dataset_gestures);
     });
   }
 

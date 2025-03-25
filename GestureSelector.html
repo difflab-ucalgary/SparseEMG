@@ -98,11 +98,11 @@
 <br/>
 <div class="row row-no-gutters">
   <div class="col-sm-3">
-<div class="demo-card-shape-customization mdl-card mdl-shadow--2dp">
 
+    <div class="demo-card-shape-customization mdl-card mdl-shadow--2dp">
 <h1>Select EMG Dataset</h1>
 
-<h3><select id="datasetSelect">
+<h2><select id="datasetSelect">
   <option value="">Select a dataset</option>
   <option value="none">None</option>
   <option value="CSL-HDEMG">CSL-HDEMG</option>
@@ -110,20 +110,27 @@
   <option value="Dataset3">Dataset3</option>
   <option value="Dataset4">Dataset4</option>
   <option value="Dataset5">Dataset 5</option>
-</select></h3>
+</select></h2>
   <br/>
   <div id="dataset-details"></div>
-  <div id="gesture-container"></div>
-  </div>
-  </div>
 
+  </div>
+  </div>
 
 <div class="col-sm-6">
   <svg id="drawing" height="400mm" width="350mm" viewBox="0 0 350 400">
   </svg>
 
 </div>
-  <div class="col-sm-3">
+<div class="col-sm-3">
+
+  <div class="demo-card-shape-customization mdl-card mdl-shadow--2dp">
+    <br/>
+    <br/>
+
+    <div id="gesture-container"></div>
+  </div>
+  <br/>
 
     <button class="generate_btn" onclick="getSelectedElectrodes()">Generate </button>
     <br/> <br/>
@@ -158,16 +165,24 @@
 
 
   function renderDatasetDetails(data){
-    const container = document.getElementById('gesture-container');
+    const container = document.getElementById('dataset-details');
 
-    const classDiv = document.createElement('div');
-    classDiv.className = 'dataset-details';
+    const linebreak = document.createElement('br');
 
     const classTitle = document.createElement('h2');
     classTitle.textContent = "Dataset Name: " + data.dataset_name;
-    classDiv.appendChild(classTitle);
-    //classDiv.appendChild(gestureRow);
-    container.appendChild(classDiv);
+
+    const electrode_count = document.createElement('h2');
+    electrode_count.textContent = "Electrodes: " + data.number_of_electrodes;
+
+    container.appendChild(classTitle);
+    container.appendChild(linebreak);
+    container.appendChild(linebreak);
+    container.appendChild(electrode_count);
+
+
+
+    //container.appendChild(classDiv);
 
   }
 
@@ -186,7 +201,7 @@
       gestureRow.className = 'gesture-row';
 
       gestureClass.gestures.forEach((gesture, index) => {
-        if (index > 0 && index % 5 === 0) {
+        if (index > 0 && index % 6 === 0) {
           classDiv.appendChild(gestureRow);
           gestureRow = document.createElement('div');
           gestureRow.className = 'gesture-row';

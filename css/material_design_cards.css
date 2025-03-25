@@ -88,8 +88,8 @@
 
 .demo-card-shape-customization.mdl-card {
     width: 800px;
-    height: 1400px;
-    background: #d1d1d1;
+    height: 1100px;
+    background: rgba(209, 209, 209, 0);
     padding-left: 30px;
     padding-right: 30px;
     padding-bottom: 30px;

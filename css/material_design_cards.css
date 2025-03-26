@@ -87,35 +87,51 @@
 }
 
 .demo-card-shape-customization.mdl-card {
-    width: 800px;
+    width: 700px;
     height: 1100px;
     background: rgba(209, 209, 209, 0);
+    border: 3px blueviolet;
     padding-left: 30px;
-    padding-right: 30px;
+    padding-right: 60px;
     padding-bottom: 30px;
+    border-left: solid;
+    border-right: solid;
+    border-bottom: solid;
+    border-top: solid;
 }
 
 .demo-card-electrode_layout_control.mdl-card {
     width: 400px;
     height: 1050px;
-    background: #3E4EB8;
+    background: rgba(209, 209, 209, 0);
     padding-left: 30px;
     padding-right: 30px;
     padding-bottom: 30px;
+    border-left: solid;
+    border-right: solid;
+    border-bottom: solid;
+    border-top: solid;
 }
 
 .demo-card-forearm_polygon_control.mdl-card {
-    width: 500px;
-    height: 680px;
-    background: #3E4EB8;
-    padding-left: 30px;
+    width: 650px;
+    height: 500px;
+    background: rgba(209, 209, 209, 0);
+    border: blueviolet;
+    padding-left: 50px;
     padding-right: 30px;
     padding-bottom: 30px;
+    margin-left: 20px;
+    border-left: solid;
+    border-right: solid;
+    border-bottom: solid;
+    border-top: solid;
 }
 .demo-card-collapsable_header.mdl-card {
     width: 500px;
     height: 20px;
     background: #3E4EB8;
+    border: blueviolet;
     padding-left: 30px;
     padding-right: 30px;
     padding-bottom: 30px;
@@ -183,12 +199,3 @@
 .demo-card-image > .mdl-card__actions {
     height: 10px;
     padding: 16px;
-    background: rgba(0, 0, 0, 0.2);
-}
-.demo-card-image__filename {
-    color: #fff;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-

@@ -99,38 +99,45 @@
 <div class="row row-no-gutters">
   <div class="col-sm-3">
 
-    <div class="demo-card-shape-customization mdl-card mdl-shadow--2dp">
-<h1>Select EMG Dataset</h1>
+    <div class="demo-card-forearm_polygon_control mdl-card mdl-shadow--16dp">
+      <h1>Select EMG Dataset</h1>
 
-<h2><select id="datasetSelect">
-  <option value="">Select a dataset</option>
-  <option value="none">None</option>
-  <option value="CSL-HDEMG">CSL-HDEMG</option>
-  <option value="Dataset2">Dataset2</option>
-  <option value="Dataset3">Dataset3</option>
-  <option value="Dataset4">Dataset4</option>
-  <option value="Dataset5">Dataset 5</option>
-</select></h2>
-  <br/>
-  <div id="dataset-details"></div>
+      <h2><select id="datasetSelect">
+        <option value="">Select a dataset</option>
+        <option value="none">None</option>
+        <option value="CSL-HDEMG">CSL-HDEMG</option>
+        <option value="Dataset2">Dataset2</option>
+        <option value="Dataset3">Dataset3</option>
+        <option value="Dataset4">Dataset4</option>
+        <option value="Dataset5">Dataset 5</option>
+      </select></h2>
+      <br/>
+      <div id="dataset-details">
+        <h2 id="dataset_name">Dataset: </h2> </br> <br/>
+        <h2 id="dataset_electrodes">Electrodes: </h2> </br> <br/>
+        <h2 id="dataset_gesture_classes">Gesture Classes: </h2> </br> <br/>
+        <h2 id="dataset_gesture_number">Number of Gestures: </h2> </br> <br/>
+        <h2 id="dataset_year">Year: </h2> </br> <br/>
+        <h2 id="dataset_publication">Publication Venue: </h2> </br> <br/>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-sm-6">
+    <svg id="drawing" height="400mm" width="350mm" viewBox="0 0 350 400">
+    </svg>
 
   </div>
-  </div>
+  <div class="col-sm-3">
 
-<div class="col-sm-6">
-  <svg id="drawing" height="400mm" width="350mm" viewBox="0 0 350 400">
-  </svg>
+    <div class="demo-card-shape-customization mdl-card mdl-shadow--16dp">
+      <br/>
+      <br/>
 
-</div>
-<div class="col-sm-3">
-
-  <div class="demo-card-shape-customization mdl-card mdl-shadow--2dp">
+      <div id="gesture-container"></div>
+    </div>
     <br/>
-    <br/>
-
-    <div id="gesture-container"></div>
-  </div>
-  <br/>
 
     <button class="generate_btn" onclick="getSelectedElectrodes()">Generate </button>
     <br/> <br/>
@@ -146,10 +153,28 @@
 
   var dataset_gestures = new Array();
 
+  var dataset_name = document.getElementById("dataset_name");
+  var dataset_electrodes = document.getElementById("dataset_electrodes");
+  var dataset_gesture_classes = document.getElementById("dataset_gesture_classes");
+  var dataset_gestures_info = document.getElementById("dataset_gesture_number");
+  var dataset_year = document.getElementById("dataset_year");
+  var dataset_publication = document.getElementById("dataset_publication");
+
+  function resetDatasetDetails(){
+    dataset_name.innerHTML = "Dataset:" + " ";
+    dataset_electrodes.innerHTML = "Electrodes:" + " ";
+    dataset_gesture_classes.innerHTML = "Gesture Classes:" + " ";
+    dataset_gestures_info.innerHTML = "Number of Gestures:" + " ";
+    dataset_year.innerHTML = "Year:" + " ";
+    dataset_publication.innerHTML = "Publication Venue:" + " ";
+  }
+
   document.getElementById('datasetSelect').addEventListener('change', function() {
     const selectedDataset = this.value;
     if (selectedDataset === 'CSL-HDEMG') {
       loadDataset('./datasets/CSL-HDEMG/dataset_metadata.json');
+    }else if(selectedDataset === "none"){
+      resetDatasetDetails();
     }
   });
 
@@ -165,24 +190,7 @@
 
 
   function renderDatasetDetails(data){
-    const container = document.getElementById('dataset-details');
-
-    const linebreak = document.createElement('br');
-
-    const classTitle = document.createElement('h2');
-    classTitle.textContent = "Dataset Name: " + data.dataset_name;
-
-    const electrode_count = document.createElement('h2');
-    electrode_count.textContent = "Electrodes: " + data.number_of_electrodes;
-
-    container.appendChild(classTitle);
-    container.appendChild(linebreak);
-    container.appendChild(linebreak);
-    container.appendChild(electrode_count);
-
-
-
-    //container.appendChild(classDiv);
+    dataset_name.innerHTML = "Dataset: " + data.dataset_name;
 
   }
 

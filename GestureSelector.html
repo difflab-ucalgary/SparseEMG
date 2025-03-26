@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="css/material_design_cards.css"/>
   <link rel="stylesheet" href="css/mdl_expansion_cards.css"/>
   <link rel="stylesheet" href="css/generate_button_styling.css"/>
+  <script src="js/libs/nouislider.js"></script>
 
   <style>
     body {
@@ -106,7 +107,7 @@
         <option value="">Select a dataset</option>
         <option value="none">None</option>
         <option value="CSL-HDEMG">CSL-HDEMG</option>
-        <option value="Dataset2">Dataset2</option>
+        <option value="PutEMG">PutEMG</option>
         <option value="Dataset3">Dataset3</option>
         <option value="Dataset4">Dataset4</option>
         <option value="Dataset5">Dataset 5</option>
@@ -122,6 +123,33 @@
       </div>
 
     </div>
+    <br/> <br/>
+    <div class="demo-card-forearm_polygon_control mdl-card mdl-shadow--16dp">
+      <h1>MODEL PARAMETERS</h1>
+
+
+
+      <h2>Select a Metric &nbsp;<select id="metricSelect">
+        <option value="permutation_importance">Permutation Importance</option>
+        <option value="rms">RMS</option>
+        <option value="mutual_importance">Mutual Importance</option>
+        <option value="shap">SHAP</option>
+      </select></h2>
+
+      <h2>Select a Classifier &nbsp;<select id="slassifierSelect">
+        <option value="logistic_regression">Logistic Regression</option>
+        <option value="rms">RMS</option>
+        <option value="random_forest">Random Forest</option>
+        <option value="SVC">Support Vector Machine</option>
+      </select></h2>
+
+      <h2>Electrode Channels</h2>
+      <br/>
+
+      <div id = "electrode_channel_slider">
+      </div>
+    </div>
+
   </div>
 
   <div class="col-sm-6">
@@ -160,6 +188,29 @@
   var dataset_year = document.getElementById("dataset_year");
   var dataset_publication = document.getElementById("dataset_publication");
 
+  var num_selected_channels = 0;
+
+  var electrode_channel_slider = document.getElementById('electrode_channel_slider');
+  noUiSlider.create(electrode_channel_slider, {
+    start: 1,
+    connect: 'lower',
+    step:1,
+    tooltips: [true],
+    range: {
+      'min': 1,
+      'max': 10
+    }
+  });
+  electrode_channel_slider.noUiSlider.on('update', electrode_channel_slider_handler);
+
+  function electrode_channel_slider_handler(values, handle, unencoded, tap, positions){
+
+    num_selected_channels = values[0];
+    console.log(num_selected_channels);
+
+  }
+
+
   function resetDatasetDetails(){
     dataset_name.innerHTML = "Dataset:" + " ";
     dataset_electrodes.innerHTML = "Electrodes:" + " ";
@@ -191,6 +242,11 @@
 
   function renderDatasetDetails(data){
     dataset_name.innerHTML = "Dataset: " + data.dataset_name;
+    dataset_electrodes.innerHTML = "Electrodes:" + data.number_of_electrodes + "";
+    dataset_gesture_classes.innerHTML = "Gesture Classes: " + data.gesture_classes.length;
+    dataset_gestures_info.innerHTML = "Number of Gestures: " + data.number_of_gestures;
+    dataset_year.innerHTML = "Year: " + data.year + "";
+    dataset_publication.innerHTML = "Publication Venue:" + data.publication_venue_short + " ";
 
   }
 

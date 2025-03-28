@@ -19,6 +19,10 @@
   <link rel="stylesheet" href="css/generate_button_styling.css"/>
   <script src="js/libs/nouislider.js"></script>
 
+  <script src="js/sparseEMGClasses/Renderer.js"></script>
+  <script src="js/sparseEMGClasses/InputShapeController.js"></script>
+
+
   <style>
     body {
       zoom: 0.6;
@@ -141,6 +145,8 @@
         <option value="rms">RMS</option>
         <option value="random_forest">Random Forest</option>
         <option value="SVC">Support Vector Machine</option>
+        <option value="knn">k-Nearest Neighbour (KNN)</option>
+        <option value="naive_bayes">Naive Bayes</option>
       </select></h2>
 
       <h2>Electrode Channels</h2>
@@ -180,6 +186,16 @@
 <script>
 
   var dataset_gestures = new Array();
+
+  var MAIN_CANVAS_SVG_WIDTH = 400;
+  var MAIN_CANVAS_SVG_HEIGHT = 400;
+  var EMG_ELECTRODE_SIZE = 2.5;
+
+  var emg_dataset;
+
+  main_canvas = document.getElementById("drawing");
+  main_canvas = Snap(main_canvas);
+  Renderer.RenderGridWithLines(main_canvas);
 
   var dataset_name = document.getElementById("dataset_name");
   var dataset_electrodes = document.getElementById("dataset_electrodes");
@@ -265,7 +281,7 @@
       gestureRow.className = 'gesture-row';
 
       gestureClass.gestures.forEach((gesture, index) => {
-        if (index > 0 && index % 6 === 0) {
+        if (index > 0 && index % 5 === 0) {
           classDiv.appendChild(gestureRow);
           gestureRow = document.createElement('div');
           gestureRow.className = 'gesture-row';
@@ -306,7 +322,84 @@
     });
   }
 
+</script>
+
+<script>
+
+
+  var mouse_down_state = false;
+  var sketchedPointArray = new Array();
+  var inputPath = new Array();
+  var cursor;
+  var inputShapes = new Array();
+
+  var input_shape_enabled = false;
+
+  main_canvas.mousedown(function (ev, x, y) {
+    // if(input_shape_enabled){
+    var cpt;
+    var point;
+    mouse_down_state = true;
+    cpt = main_canvas.getCursorPoint(x,y);
+    if(cursor == null){
+      cursor = main_canvas.circle(cpt.x, cpt.y ,2).attr({ fill: "blue" });
+      sketchedPointArray.push(cpt.x, cpt.y);
+      inputPath.push([cpt.x, cpt.y]);
+    }
+
+
+
+    // }
+
+  });
+
+  main_canvas.mousemove(function (ev, x, y) {
+    var cpt;
+    var point;
+
+    if(mouse_down_state ==true){
+      cpt = main_canvas.getCursorPoint(x,y);
+      sketchedPointArray.push(cpt.x, cpt.y);
+      inputPath.push([cpt.x, cpt.y]);
+      cursor.attr({cx:cpt.x, cy:cpt.y});
+    }
+
+
+  });
+
+  main_canvas.mouseup(function (ev, x,y) {
+    mouse_down_state = false;
+    InputShapeController.SetShapeCoords(sketchedPointArray);
+    InputShapeController.SetInputShapeType("free-form");
+    InputShapeController.RenderInputShape(main_canvas,"free-form");
+    inputShapes.push(sketchedPointArray);
+    sketchedPointArray = [];
+    //InputShapeController.SetShapeInputFields(InputShapeController.GetShapeSVG());
+
+    console.log(inputShapes);
+
+
+  });
 
 </script>
+
+<script>
+  // Load the SVG file
+  Snap.load("./datasets/CSL-HDEMG/electrode_placement.svg", function (loadedFragment) {
+    //var svgContainer = Snap("#svg-container");
+    main_canvas.append(loadedFragment);
+
+    // Select all circles in the SVG
+    var circles = main_canvas.selectAll("circle");
+
+    // Add click event listener to each circle
+    circles.forEach(function (circle) {
+      circle.click(function () {
+        alert("Circle clicked: " + this.attr("id"));
+      });
+    });
+  });
+</script>
+
 </body>
 </html>

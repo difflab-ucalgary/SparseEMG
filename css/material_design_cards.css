@@ -127,6 +127,21 @@
     border-bottom: solid;
     border-top: solid;
 }
+
+.demo-card-model_parameters.mdl-card {
+  width: 650px;
+  height: 500px;
+  background: rgba(209, 209, 209, 0);
+  border: blueviolet;
+  padding-left: 50px;
+  padding-right: 30px;
+  padding-bottom: 30px;
+  margin-left: 20px;
+  border-left: solid;
+  border-right: solid;
+  border-bottom: solid;
+  border-top: solid;
+}
 .demo-card-collapsable_header.mdl-card {
     width: 500px;
     height: 20px;
@@ -149,6 +164,9 @@
     border-color: rgba(255, 255, 255, 0.2);
 }
 
+.demo-card-model_parameters > .mdl-card__actions {
+  border-color: rgba(255, 255, 255, 0.2);
+}
 
 .demo-card-optimizationWeights > .mdl-card__actions {
     border-color: rgba(255, 255, 255, 0.2);

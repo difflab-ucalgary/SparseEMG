@@ -14,6 +14,7 @@
   <script src="js/libs/snap.svg.js"></script>
 
   <link rel="stylesheet" href="css/default.css"/>
+  <!--<link rel="stylesheet" href="css/style.css"/>-->
   <link rel="stylesheet" href="css/material_design_cards.css"/>
   <link rel="stylesheet" href="css/mdl_expansion_cards.css"/>
   <link rel="stylesheet" href="css/generate_button_styling.css"/>
@@ -76,12 +77,17 @@
       align-items: flex-start;
       gap: 16px;
     }
+
+    .selected {
+      fill: rgba(0, 255, 0, 0.5); /* Semi-transparent green */
+      stroke: green;
+      stroke-width: 2;
+    }
   </style>
 
 </head>
 <body>
 <header class="mdl-layout__header mdl-layout__header--waterfall">
-  <!-- Top row, always visible -->
   <div class="mdl-layout__header-row">
         <span class="mdl-layout-title">
             <img src="icons/tool_icon_v1.png" style="display: inline-block;" height="60" width="150"> &nbsp;&nbsp;
@@ -97,7 +103,6 @@
       </div>
     </div>
   </div>
-  <!-- Bottom row, not visible on scroll -->
 </header>
 
 <br/>
@@ -151,10 +156,18 @@
 
       <h2>Electrode Channels</h2>
       <br/>
-
       <div id = "electrode_channel_slider">
       </div>
+      <br/>
+
+
+
+
+
+
+
     </div>
+
 
   </div>
 
@@ -182,15 +195,21 @@
 
   </div>
 </div>
+<script>
 
+
+
+</script>
 <script>
 
   var dataset_gestures = new Array();
+  var electrodeSet = new Array();
 
   var MAIN_CANVAS_SVG_WIDTH = 400;
   var MAIN_CANVAS_SVG_HEIGHT = 400;
   var EMG_ELECTRODE_SIZE = 2.5;
 
+  var sketch_toggle = false;
   var emg_dataset;
 
   main_canvas = document.getElementById("drawing");
@@ -222,7 +241,7 @@
   function electrode_channel_slider_handler(values, handle, unencoded, tap, positions){
 
     num_selected_channels = values[0];
-    console.log(num_selected_channels);
+    //console.log(num_selected_channels);
 
   }
 
@@ -240,7 +259,10 @@
     const selectedDataset = this.value;
     if (selectedDataset === 'CSL-HDEMG') {
       loadDataset('./datasets/CSL-HDEMG/dataset_metadata.json');
-    }else if(selectedDataset === "none"){
+    }else if(selectedDataset === 'PutEMG'){
+      loadDataset('./datasets/putEMG/dataset_metadata_putemg.json');
+    }
+    else if(selectedDataset === "none"){
       resetDatasetDetails();
     }
   });
@@ -252,9 +274,45 @@
         console.log(data.number_of_gestures);
         renderDatasetDetails(data);
         renderGestureImages(data);
+        renderDatasetElectrodes(data);
       });
   }
 
+  function renderDatasetElectrodes(data){
+
+    electrode_placement_area = Snap.load(data.electrode_placement_illustration, function (f){
+      main_canvas.append(f);
+
+      var elements = main_canvas.selectAll("[id]");
+
+      elements.forEach(function (el){
+        var elementId = el.attr("id");
+        console.log(elementId);
+        electrodeSet.push({'id': elementId, 'selected': false});
+
+        el.click(function (){
+          console.log("Clicked element with ID:", elementId);
+          var currentId= electrodeSet.findIndex(electrode => electrode.id === elementId);
+          console.log();
+          electrodeSet[currentId].selected = !electrodeSet[currentId].selected
+         // currentId.selected = !currentId.selected;
+         // (electrodeSet.findIndex(electrode => electrode.id === elementId)).selected =  !((electrodeSet.findIndex(electrode => electrode.id === elementId)).selected);
+
+          if(electrodeSet[currentId].selected === true){
+            el.attr({fill: '#22ff69'});
+          }else{
+            el.attr({fill: '#000000'});
+          }
+
+        });
+
+        console.log(electrodeSet);
+      });
+
+    }, function (error){
+      console.error("Failed to load SVG Electrode Illustration: ", error);
+    });
+  }
 
   function renderDatasetDetails(data){
     dataset_name.innerHTML = "Dataset: " + data.dataset_name;
@@ -267,7 +325,11 @@
   }
 
   function renderGestureImages(data) {
+    main_canvas.clear();
+    Renderer.RenderGridWithLines(main_canvas);
     const container = document.getElementById('gesture-container');
+    var GESTURES_PER_ROW = 5;
+
     data.gesture_classes.forEach(gestureClass => {
       var i =0 ;
       const classDiv = document.createElement('div');
@@ -281,7 +343,7 @@
       gestureRow.className = 'gesture-row';
 
       gestureClass.gestures.forEach((gesture, index) => {
-        if (index > 0 && index % 5 === 0) {
+        if (index > 0 && index % GESTURES_PER_ROW === 0) {
           classDiv.appendChild(gestureRow);
           gestureRow = document.createElement('div');
           gestureRow.className = 'gesture-row';
@@ -336,20 +398,20 @@
   var input_shape_enabled = false;
 
   main_canvas.mousedown(function (ev, x, y) {
-    // if(input_shape_enabled){
-    var cpt;
-    var point;
-    mouse_down_state = true;
-    cpt = main_canvas.getCursorPoint(x,y);
-    if(cursor == null){
-      cursor = main_canvas.circle(cpt.x, cpt.y ,2).attr({ fill: "blue" });
-      sketchedPointArray.push(cpt.x, cpt.y);
-      inputPath.push([cpt.x, cpt.y]);
+    if(sketch_toggle){
+      var cpt;
+      var point;
+      mouse_down_state = true;
+      cpt = main_canvas.getCursorPoint(x,y);
+      if(cursor == null){
+        cursor = main_canvas.circle(cpt.x, cpt.y ,2).attr({ fill: "blue" });
+        sketchedPointArray.push(cpt.x, cpt.y);
+        inputPath.push([cpt.x, cpt.y]);
+      }
+
+
+
     }
-
-
-
-    // }
 
   });
 
@@ -376,7 +438,7 @@
     sketchedPointArray = [];
     //InputShapeController.SetShapeInputFields(InputShapeController.GetShapeSVG());
 
-    console.log(inputShapes);
+    //console.log(inputShapes);
 
 
   });

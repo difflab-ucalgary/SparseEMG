@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 721 3311">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: ArialMT, Arial;
+        font-size: 23px;
+      }
+
+      .cls-1, .cls-2 {
+        isolation: isolate;
+      }
+
+      .cls-3 {
+        fill: none;
+      }
+
+      .cls-4 {
+        fill: #ed81aa;
+        fill-rule: evenodd;
+      }
+
+      .cls-5 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="cls-3" x="1" y=".9" width="720" height="3310"/>
+    </clipPath>
+  </defs>
+  <!-- Generator: Adobe Illustrator 28.7.5, SVG Export Plug-In . SVG Version: 1.2.0 Build 176)  -->
+  <g>
+    <g id="Layer_1">
+      <rect class="cls-3" width="721" height="3311"/>
+      <g class="cls-5">
+        <image id="img1" class="cls-2" width="278" height="1457" transform="translate(-34.5 -49.5) scale(2.8)" xlink:href="electrode_placement_v1-1.png"/>
+      </g>
+      <path class="cls-4" d="M255,2644c0,11.1-8.7,20-19.5,20s-19.5-8.9-19.5-20,8.7-20,19.5-20,19.5,8.9,19.5,20Z"/>
+      <text class="cls-1" transform="translate(216.4 2651)"><tspan x="0" y="0">187</tspan></text>
+      <path class="cls-4" d="M328,2632c0,11.1-8.7,20-19.5,20s-19.5-8.9-19.5-20,8.7-20,19.5-20,19.5,8.9,19.5,20Z"/>
+      <text class="cls-1" transform="translate(289.5 2639)"><tspan x="0" y="0">188</tspan></text>
+      <image id="img3" class="cls-2" width="122" height="81" transform="translate(332 2568)" xlink:href="electrode_placement_v1-2.png"/>
+      <image id="img4" class="cls-2" width="122" height="81" transform="translate(404 2533)" xlink:href="electrode_placement_v1-3.png"/>
+      <image id="img5" class="cls-2" width="122" height="81" transform="translate(467 2496)" xlink:href="electrode_placement_v1-4.png"/>
+      <image id="img6" class="cls-2" width="62" height="100" transform="translate(538 2446)" xlink:href="electrode_placement_v1-5.png"/>
+      <path class="cls-4" d="M188,2642.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(149.9 2649)"><tspan x="0" y="0">186</tspan></text>
+      <image id="img7" class="cls-2" width="97" height="108" transform="translate(70 2579)" xlink:href="electrode_placement_v1-6.png"/>
+      <image id="img8" class="cls-2" width="62" height="100" transform="translate(50 2555)" xlink:href="electrode_placement_v1-7.png"/>
+      <image id="img9" class="cls-2" width="62" height="100" transform="translate(538 2520)" xlink:href="electrode_placement_v1-8.png"/>
+      <image id="img10" class="cls-2" width="122" height="81" transform="translate(404 2606)" xlink:href="electrode_placement_v1-9.png"/>
+      <image id="img11" class="cls-2" width="122" height="81" transform="translate(467 2569)" xlink:href="electrode_placement_v1-10.png"/>
+      <image id="img12" class="cls-2" width="62" height="99" transform="translate(50 2626)" xlink:href="electrode_placement_v1-11.png"/>
+      <image id="img13" class="cls-2" width="63" height="100" transform="translate(87 2652)" xlink:href="electrode_placement_v1-12.png"/>
+      <path class="cls-4" d="M188,2711c0,11.1-8.7,20-19.5,20s-19.5-8.9-19.5-20,8.7-20,19.5-20,19.5,8.9,19.5,20Z"/>
+      <text class="cls-1" transform="translate(149.9 2718)"><tspan x="0" y="0">162</tspan></text>
+      <path class="cls-4" d="M255,2713.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(216.4 2720)"><tspan x="0" y="0">163</tspan></text>
+      <path class="cls-4" d="M328,2702.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(289.5 2710)"><tspan x="0" y="0">164</tspan></text>
+      <image id="img14" class="cls-2" width="122" height="81" transform="translate(332 2640)" xlink:href="electrode_placement_v1-13.png"/>
+      <image id="img15" class="cls-2" width="62" height="100" transform="translate(538 2594)" xlink:href="electrode_placement_v1-14.png"/>
+      <image id="img16" class="cls-2" width="62" height="99" transform="translate(50 2696)" xlink:href="electrode_placement_v1-15.png"/>
+      <image id="img17" class="cls-2" width="63" height="99" transform="translate(87 2721)" xlink:href="electrode_placement_v1-16.png"/>
+      <path class="cls-4" d="M188,2779.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(149.9 2787)"><tspan x="0" y="0">139</tspan></text>
+      <path class="cls-4" d="M255,2782.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(216.4 2790)"><tspan x="0" y="0">140</tspan></text>
+      <path class="cls-4" d="M328,2773.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(289.5 2780)"><tspan x="0" y="0">141</tspan></text>
+      <path class="cls-4" d="M399,2752c0,11.1-8.7,20-19.5,20s-19.5-8.9-19.5-20,8.7-20,19.5-20,19.5,8.9,19.5,20Z"/>
+      <text class="cls-1" transform="translate(360.7 2759)"><tspan x="0" y="0">142</tspan></text>
+      <path class="cls-4" d="M472,2719.5c0,10.8-9,19.5-20,19.5s-20-8.7-20-19.5,9-19.5,20-19.5,20,8.7,20,19.5Z"/>
+      <text class="cls-1" transform="translate(433.2 2726)"><tspan x="0" y="0">143</tspan></text>
+      <image id="img18" class="cls-2" width="122" height="81" transform="translate(467 2643)" xlink:href="electrode_placement_v1-17.png"/>
+      <image id="img19" class="cls-2" width="62" height="99" transform="translate(538 2669)" xlink:href="electrode_placement_v1-18.png"/>
+      <image id="img20" class="cls-2" width="62" height="99" transform="translate(50 2766)" xlink:href="electrode_placement_v1-19.png"/>
+      <image id="img21" class="cls-2" width="63" height="100" transform="translate(87 2789)" xlink:href="electrode_placement_v1-20.png"/>
+      <path class="cls-4" d="M188,2848.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(149.9 2855)"><tspan x="0" y="0">115</tspan></text>
+      <path class="cls-4" d="M255,2852.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(216.4 2859)"><tspan x="0" y="0">116</tspan></text>
+      <path class="cls-4" d="M328,2844.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(289.5 2851)"><tspan x="0" y="0">117</tspan></text>
+      <path class="cls-4" d="M399,2824c0,11.1-8.7,20-19.5,20s-19.5-8.9-19.5-20,8.7-20,19.5-20,19.5,8.9,19.5,20Z"/>
+      <text class="cls-1" transform="translate(360.7 2831)"><tspan x="0" y="0">118</tspan></text>
+      <path class="cls-4" d="M472,2792.5c0,10.8-9,19.5-20,19.5s-20-8.7-20-19.5,9-19.5,20-19.5,20,8.7,20,19.5Z"/>
+      <text class="cls-1" transform="translate(433.2 2799)"><tspan x="0" y="0">119</tspan></text>
+      <image id="img22" class="cls-2" width="122" height="81" transform="translate(467 2716)" xlink:href="electrode_placement_v1-21.png"/>
+      <image id="img23" class="cls-2" width="62" height="99" transform="translate(538 2743)" xlink:href="electrode_placement_v1-22.png"/>
+      <image id="img24" class="cls-2" width="62" height="100" transform="translate(50 2836)" xlink:href="electrode_placement_v1-23.png"/>
+      <image id="img25" class="cls-2" width="63" height="99" transform="translate(87 2858)" xlink:href="electrode_placement_v1-24.png"/>
+      <path class="cls-4" d="M183,2916.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(149.9 2924)"><tspan x="0" y="0">91</tspan></text>
+      <path class="cls-4" d="M249,2920.5c0,10.8-9,19.5-20,19.5s-20-8.7-20-19.5,9-19.5,20-19.5,20,8.7,20,19.5Z"/>
+      <text class="cls-1" transform="translate(216.4 2929)"><tspan x="0" y="0">92</tspan></text>
+      <path class="cls-4" d="M323,2915c0,11.1-8.7,20-19.5,20s-19.5-8.9-19.5-20,8.7-20,19.5-20,19.5,8.9,19.5,20Z"/>
+      <text class="cls-1" transform="translate(289.5 2922)"><tspan x="0" y="0">93</tspan></text>
+      <path class="cls-4" d="M393,2895.5c0,10.8-9,19.5-20,19.5s-20-8.7-20-19.5,9-19.5,20-19.5,20,8.7,20,19.5Z"/>
+      <text class="cls-1" transform="translate(360.7 2903)"><tspan x="0" y="0">94</tspan></text>
+      <path class="cls-4" d="M466,2865.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(433.2 2872)"><tspan x="0" y="0">95</tspan></text>
+      <image id="img26" class="cls-2" width="122" height="81" transform="translate(467 2790)" xlink:href="electrode_placement_v1-25.png"/>
+      <image id="img27" class="cls-2" width="62" height="99" transform="translate(538 2817)" xlink:href="electrode_placement_v1-26.png"/>
+      <image id="img28" class="cls-2" width="62" height="99" transform="translate(50 2907)" xlink:href="electrode_placement_v1-27.png"/>
+      <image id="img29" class="cls-2" width="63" height="99" transform="translate(87 2927)" xlink:href="electrode_placement_v1-28.png"/>
+      <path class="cls-4" d="M183,2985.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(149.9 2992)"><tspan x="0" y="0">6</tspan></text>
+      <text class="cls-1" transform="translate(161.9 2992)"><tspan x="0" y="0">7</tspan></text>
+      <path class="cls-4" d="M249,2990c0,11.1-9,20-20,20s-20-8.9-20-20,9-20,20-20,20,8.9,20,20Z"/>
+      <text class="cls-1" transform="translate(216.4 2998)"><tspan x="0" y="0">68</tspan></text>
+      <path class="cls-4" d="M323,2985.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(289.5 2993)"><tspan x="0" y="0">6</tspan></text>
+      <text class="cls-1" transform="translate(301.6 2993)"><tspan x="0" y="0">9</tspan></text>
+      <path class="cls-4" d="M393,2967.5c0,10.8-9,19.5-20,19.5s-20-8.7-20-19.5,9-19.5,20-19.5,20,8.7,20,19.5Z"/>
+      <text class="cls-1" transform="translate(360.7 2975)"><tspan x="0" y="0">7</tspan></text>
+      <text class="cls-1" transform="translate(372.8 2975)"><tspan x="0" y="0">0</tspan></text>
+      <path class="cls-4" d="M466,2938.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(433.2 2945)"><tspan x="0" y="0">7</tspan></text>
+      <text class="cls-1" transform="translate(445.2 2945)"><tspan x="0" y="0">1</tspan></text>
+      <image id="img30" class="cls-2" width="122" height="81" transform="translate(467 2863)" xlink:href="electrode_placement_v1-29.png"/>
+      <image id="img31" class="cls-2" width="62" height="99" transform="translate(538 2891)" xlink:href="electrode_placement_v1-30.png"/>
+      <image id="img32" class="cls-2" width="62" height="99" transform="translate(50 2977)" xlink:href="electrode_placement_v1-31.png"/>
+      <image id="img33" class="cls-2" width="63" height="99" transform="translate(87 2995)" xlink:href="electrode_placement_v1-32.png"/>
+      <path class="cls-4" d="M183,3054c0,11.1-8.7,20-19.5,20s-19.5-8.9-19.5-20,8.7-20,19.5-20,19.5,8.9,19.5,20Z"/>
+      <text class="cls-1" transform="translate(149.9 3061)"><tspan x="0" y="0">43</tspan></text>
+      <path class="cls-4" d="M249,3059.5c0,10.8-9,19.5-20,19.5s-20-8.7-20-19.5,9-19.5,20-19.5,20,8.7,20,19.5Z"/>
+      <text class="cls-1" transform="translate(216.4 3067)"><tspan x="0" y="0">44</tspan></text>
+      <path class="cls-4" d="M323,3056.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(289.5 3064)"><tspan x="0" y="0">45</tspan></text>
+      <path class="cls-4" d="M393,3039.5c0,10.8-9,19.5-20,19.5s-20-8.7-20-19.5,9-19.5,20-19.5,20,8.7,20,19.5Z"/>
+      <text class="cls-1" transform="translate(360.7 3047)"><tspan x="0" y="0">46</tspan></text>
+      <path class="cls-4" d="M463,3011.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(433.2 3018)"><tspan x="0" y="0">47</tspan></text>
+      <image id="img34" class="cls-2" width="122" height="80" transform="translate(467 2937)" xlink:href="electrode_placement_v1-33.png"/>
+      <image id="img35" class="cls-2" width="62" height="99" transform="translate(538 2965)" xlink:href="electrode_placement_v1-34.png"/>
+      <image id="img36" class="cls-2" width="62" height="99" transform="translate(50 3047)" xlink:href="electrode_placement_v1-35.png"/>
+      <image id="img37" class="cls-2" width="63" height="99" transform="translate(87 3064)" xlink:href="electrode_placement_v1-36.png"/>
+      <path class="cls-4" d="M183,3122.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(149.9 3130)"><tspan x="0" y="0">19</tspan></text>
+      <path class="cls-4" d="M249,3128.5c0,10.8-9,19.5-20,19.5s-20-8.7-20-19.5,9-19.5,20-19.5,20,8.7,20,19.5Z"/>
+      <text class="cls-1" transform="translate(216.4 3137)"><tspan x="0" y="0">20</tspan></text>
+      <path class="cls-4" d="M320,3127.5c0,10.8-9,19.5-20,19.5s-20-8.7-20-19.5,9-19.5,20-19.5,20,8.7,20,19.5Z"/>
+      <text class="cls-1" transform="translate(289.5 3134)"><tspan x="0" y="0">21</tspan></text>
+      <path class="cls-4" d="M393,3111.5c0,10.8-9,19.5-20,19.5s-20-8.7-20-19.5,9-19.5,20-19.5,20,8.7,20,19.5Z"/>
+      <text class="cls-1" transform="translate(360.7 3119)"><tspan x="0" y="0">22</tspan></text>
+      <path class="cls-4" d="M464,3084.5c0,10.8-8.7,19.5-19.5,19.5s-19.5-8.7-19.5-19.5,8.7-19.5,19.5-19.5,19.5,8.7,19.5,19.5Z"/>
+      <text class="cls-1" transform="translate(433.2 3091)"><tspan x="0" y="0">23</tspan></text>
+      <image id="img38" class="cls-2" width="122" height="81" transform="translate(467 3010)" xlink:href="electrode_placement_v1-37.png"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,54 @@
+{
+"dataset_name": "putEMG",
+"author_name": "Piotr Kaczmarek, Jakub Tomczyński, Tomasz Mańkowski",
+"link_to_dataset": "https://biolab.put.poznan.pl/putemg-dataset/",
+"publication_venue": "MDPI Sensors, 2019.",
+"publication_venue_short": "MDPI Sensors",
+"year": 2019,
+"number_of_electrodes": 24,
+"electrode_size": "5mm",
+"electrode_spacing": "10mm",
+"number_of_rows": 3,
+"number_of_columns": 8,
+"number_of_gestures": 8,
+"electrode_placement_illustration":"./datasets/putEMG/electrode_illustration_v2.svg",
+"gesture_classes": [
+{
+"class_name": " ",
+"gestures": [
+{
+"gesture_name": "Idle",
+"illustration": "./datasets/putEMG/idle.jpg"
+},
+{
+"gesture_name": "fist",
+"illustration": "./datasets/putEMG/fist.jpg"
+},
+{
+"gesture_name": "Flexion",
+"illustration": "./datasets/putEMG/flexion.jpg"
+},
+{
+"gesture_name": "Extension",
+"illustration": "./datasets/putEMG/extension.jpg"
+},
+{
+"gesture_name": "Pinch Thumb-Index",
+"illustration": "./datasets/putEMG/pinch-thumb-index.jpg"
+},
+{
+"gesture_name": "Pinch Thumb-Middle",
+"illustration": "./datasets/putEMG/pinch-thumb-middle.jpg"
+},
+{
+"gesture_name": "Pinch Thumb-Ring",
+"illustration": "./datasets/putEMG/pinch-thumb-ring.jpg"
+},
+{
+"gesture_name": "Pinch Thumb-Small",
+"illustration": "./datasets/putEMG/pinch-thumb-small.jpg"
+}
+]
+}
+]
+}

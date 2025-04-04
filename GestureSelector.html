@@ -12,6 +12,21 @@
   <link rel="stylesheet" href="css/bootstrap3.3.7.min.css"/>
   <link rel="stylesheet" href="css/nouislider.css"/>
   <script src="js/libs/snap.svg.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <style>
+    .mdl-switch {
+      align-items: center;
+      display: flex;
+    }
+
+    .mdl-switch__label {
+      margin-left: 8px;
+      font-size: 1rem;
+      color: rgba(0, 0, 0, 0.87);
+    }
+  </style>
 
   <link rel="stylesheet" href="css/default.css"/>
   <!--<link rel="stylesheet" href="css/style.css"/>-->
@@ -20,8 +35,12 @@
   <link rel="stylesheet" href="css/generate_button_styling.css"/>
   <script src="js/libs/nouislider.js"></script>
 
+<!--  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>-->
+
   <script src="js/sparseEMGClasses/Renderer.js"></script>
   <script src="js/sparseEMGClasses/InputShapeController.js"></script>
+
 
 
   <style>
@@ -85,6 +104,53 @@
     }
   </style>
 
+
+
+  <style>
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 90px;
+      height: 60px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0px;
+      height: 0px;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #8a8787;
+      transition: .4s;
+      border-radius: 60px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: #686363;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+    input:checked + .slider:before {
+      background-color: #403b3b;
+      transform: translateX(26px);
+    }
+  </style>
+
+
+
 </head>
 <body>
 <header class="mdl-layout__header mdl-layout__header--waterfall">
@@ -109,10 +175,10 @@
 <div class="row row-no-gutters">
   <div class="col-sm-3">
 
-    <div class="demo-card-forearm_polygon_control mdl-card mdl-shadow--16dp">
-      <h1>Select EMG Dataset</h1>
+    <div class="demo-card-select_emg_dataset mdl-card mdl-shadow--16dp">
+      <h2 style="margin-bottom: 0px">Select EMG Dataset</h2>
 
-      <h2><select id="datasetSelect">
+      <h3 style="margin-bottom: 0px"><select id="datasetSelect">
         <option value="">Select a dataset</option>
         <option value="none">None</option>
         <option value="CSL-HDEMG">CSL-HDEMG</option>
@@ -120,45 +186,59 @@
         <option value="Dataset3">Dataset3</option>
         <option value="Dataset4">Dataset4</option>
         <option value="Dataset5">Dataset 5</option>
-      </select></h2>
-      <br/>
+      </select></h3>
+
       <div id="dataset-details">
-        <h2 id="dataset_name">Dataset: </h2> </br> <br/>
-        <h2 id="dataset_electrodes">Electrodes: </h2> </br> <br/>
-        <h2 id="dataset_gesture_classes">Gesture Classes: </h2> </br> <br/>
-        <h2 id="dataset_gesture_number">Number of Gestures: </h2> </br> <br/>
-        <h2 id="dataset_year">Year: </h2> </br> <br/>
-        <h2 id="dataset_publication">Publication Venue: </h2> </br> <br/>
+        <h3 style="margin-bottom: 0px" id="dataset_name">Dataset: </h3>
+        <h3 style="margin-bottom: 0px" id="dataset_electrodes">Electrodes: </h3>
+        <h3 id="dataset_gesture_classes">Gesture Classes: </h3>
+        <h3 style="margin-bottom: 0px" id="dataset_gesture_number">Number of Gestures: </h3>
+        <h3 style="margin-bottom: 0px" id="dataset_year">Year: </h3>
+        <h3 style="margin-bottom: 0px" id="dataset_publication">Publication Venue: </h3>
       </div>
 
     </div>
     <br/> <br/>
     <div class="demo-card-forearm_polygon_control mdl-card mdl-shadow--16dp">
-      <h1>MODEL PARAMETERS</h1>
+      <h2 style="margin-bottom: 0px">MODEL PARAMETERS</h2>
 
-
-
-      <h2>Select a Metric &nbsp;<select id="metricSelect">
+      <h3 style="margin-bottom: 0px">Select a Metric <select id="metricSelect">
         <option value="permutation_importance">Permutation Importance</option>
         <option value="rms">RMS</option>
         <option value="mutual_importance">Mutual Importance</option>
         <option value="shap">SHAP</option>
-      </select></h2>
+      </select></h3>
 
-      <h2>Select a Classifier &nbsp;<select id="slassifierSelect">
+      <h3 style="margin-bottom: 0px">Select a Classifier &nbsp;<select id="classifierSelect">
         <option value="logistic_regression">Logistic Regression</option>
         <option value="rms">RMS</option>
         <option value="random_forest">Random Forest</option>
         <option value="SVC">Support Vector Machine</option>
         <option value="knn">k-Nearest Neighbour (KNN)</option>
         <option value="naive_bayes">Naive Bayes</option>
-      </select></h2>
+      </select></h3>
 
-      <h2>Electrode Channels</h2>
-      <br/>
+      <h3>Electrode Channels</h3>
+
       <div id = "electrode_channel_slider">
       </div>
-      <br/>
+
+      <br/> <br/>
+
+      <div>
+        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="sketch_toggle">
+          <input type="checkbox" id="sketch_toggle" class="mdl-switch__input" checked>
+          <span class="mdl-switch__label"><h3>Enable Sketching</h3></span>
+        </label>
+        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="sketch_toggle">
+          <input type="checkbox" id="sketch_toggle" class="mdl-switch__input" checked>
+          <span class="mdl-switch__label"><h3>Enable Sketching</h3></span>
+        </label>
+
+      </div>
+
+
+
 
 
 
@@ -186,7 +266,7 @@
     </div>
     <br/>
 
-    <button class="generate_btn" onclick="getSelectedElectrodes()">Generate </button>
+    <button class="generate_btn" onclick="getUserSelectedData()">Generate </button>
     <br/> <br/>
 
     <button class="generate_btn">Generate For Shape</button>
@@ -384,6 +464,13 @@
     });
   }
 
+  function getUserSelectedData(){
+    console.log(dataset_gestures)
+    console.log(electrodeSet);
+    console.log(num_selected_channels);
+    console.log(document.getElementById('metricSelect').value);
+    console.log(document.getElementById('classifierSelect').value);
+  }
 </script>
 
 <script>

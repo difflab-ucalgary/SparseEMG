@@ -116,7 +116,7 @@
 .demo-card-forearm_polygon_control.mdl-card {
     width: 650px;
     height: 500px;
-    background: rgba(209, 209, 209, 0);
+    background: rgb(93, 156, 107);
     border: blueviolet;
     padding-left: 50px;
     padding-right: 30px;
@@ -126,6 +126,21 @@
     border-right: solid;
     border-bottom: solid;
     border-top: solid;
+}
+
+.demo-card-select_emg_dataset.mdl-card {
+  width: 650px;
+  height: 550px;
+  background: rgb(239, 185, 185);
+  border: blueviolet;
+  padding-left: 50px;
+  padding-right: 30px;
+  padding-bottom: 30px;
+  margin-left: 20px;
+  border-left: solid;
+  border-right: solid;
+  border-bottom: solid;
+  border-top: solid;
 }
 
 .demo-card-model_parameters.mdl-card {

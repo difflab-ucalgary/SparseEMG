@@ -10844,35 +10844,35 @@
 
         <path id="electrode_187" class="cls-1611" d="M82.6,897.5c0,3.7-2.9,6.7-6.6,6.7s-6.6-3-6.6-6.7,2.9-6.7,6.6-6.7,6.6,3,6.6,6.7Z"/>
         <g class="cls-899">
-          <text class="cls-901" transform="translate(68.8 899.7)"><tspan x="0" y="0">187</tspan></text>
+          <text pointer-events="none" class="cls-901" transform="translate(68.8 899.7)"><tspan x="0" y="0">187</tspan></text>
         </g>
         <path id="electrode_188" class="cls-1611" d="M107.2,897.5c0,3.7-2.9,6.7-6.6,6.7s-6.6-3-6.6-6.7,2.9-6.7,6.6-6.7,6.6,3,6.6,6.7Z"/>
         <g class="cls-899">
-          <text class="cls-901" transform="translate(94.2 899.7)"><tspan x="0" y="0">188</tspan></text>
+          <text pointer-events="none" class="cls-901" transform="translate(94.2 899.7)"><tspan x="0" y="0">188</tspan></text>
         </g>
         <path id="electrode_186" class="cls-1611" d="M60,897.5c0,3.6-2.9,6.6-6.6,6.6s-6.6-2.9-6.6-6.6,2.9-6.6,6.6-6.6,6.6,2.9,6.6,6.6Z"/>
         <g class="cls-899">
-          <text class="cls-901" transform="translate(47.3 899.7)"><tspan x="0" y="0">186</tspan></text>
+          <text pointer-events="none" class="cls-901" transform="translate(47.3 899.7)"><tspan x="0" y="0">186</tspan></text>
         </g>
         <path id="electrode_162" class="cls-1611" d="M60,916.6c0,3.7-2.9,6.7-6.6,6.7s-6.6-3-6.6-6.7,2.9-6.7,6.6-6.7,6.6,3,6.6,6.7Z"/>
         <g class="cls-899">
-          <text class="cls-901" transform="translate(47.1 918.7)"><tspan x="0" y="0">162</tspan></text>
+          <text  pointer-events="none" class="cls-901" transform="translate(47.1 918.7)"><tspan x="0" y="0">162</tspan></text>
         </g>
         <path id="electrode_163" class="cls-1611" d="M82.6,916.6c0,3.6-2.9,6.6-6.6,6.6s-6.6-2.9-6.6-6.6,2.9-6.6,6.6-6.6,6.6,2.9,6.6,6.6Z"/>
         <g class="cls-899">
-          <text class="cls-901" transform="translate(68.9 918.7)"><tspan x="0" y="0">163</tspan></text>
+          <text pointer-events="none" class="cls-901" transform="translate(68.9 918.7)"><tspan x="0" y="0">163</tspan></text>
         </g>
         <path id="electrode_164" class="cls-1611" d="M107.2,916.6c0,3.6-2.9,6.6-6.6,6.6s-6.6-2.9-6.6-6.6,2.9-6.6,6.6-6.6,6.6,2.9,6.6,6.6Z"/>
         <g class="cls-899">
-          <text class="cls-900" transform="translate(93.9 918.7)"><tspan x="0" y="0">164</tspan></text>
+          <text pointer-events="none" class="cls-900" transform="translate(93.9 918.7)"><tspan x="0" y="0">164</tspan></text>
         </g>
         <path id="electrode_138" class="cls-1611" d="M60,940.6c0,3.6-2.9,6.6-6.6,6.6s-6.6-2.9-6.6-6.6,2.9-6.6,6.6-6.6,6.6,2.9,6.6,6.6Z"/>
         <g class="cls-899">
-          <text class="cls-901" transform="translate(47.1 942.6)"><tspan x="0" y="0">138</tspan></text>
+          <text pointer-events="none" class="cls-901" transform="translate(47.1 942.6)"><tspan x="0" y="0">138</tspan></text>
         </g>
         <path id="electrode_139" class="cls-1611" d="M82.6,940.6c0,3.6-2.9,6.6-6.6,6.6s-6.6-2.9-6.6-6.6,2.9-6.6,6.6-6.6,6.6,2.9,6.6,6.6Z"/>
         <g class="cls-899">
-          <text class="cls-901" transform="translate(69.6 942.6)"><tspan x="0" y="0">139</tspan></text>
+          <text pointer-events="none" class="cls-901" transform="translate(69.6 942.6)"><tspan x="0" y="0">139</tspan></text>
         </g>
         <path id="electrode_140" class="cls-1611" d="M107.2,940.6c0,3.6-2.9,6.6-6.6,6.6s-6.6-2.9-6.6-6.6,2.9-6.6,6.6-6.6,6.6,2.9,6.6,6.6Z"/>
         <g class="cls-899">

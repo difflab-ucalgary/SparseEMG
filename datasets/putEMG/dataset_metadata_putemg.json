@@ -11,7 +11,7 @@
 "number_of_rows": 3,
 "number_of_columns": 8,
 "number_of_gestures": 8,
-"electrode_placement_illustration":"./datasets/putEMG/electrode_illustration_v2.svg",
+"electrode_placement_illustration":"./datasets/putEMG/electrode_illustration.svg",
 "gesture_classes": [
 {
 "class_name": " ",

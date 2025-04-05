@@ -290,6 +290,7 @@
   var EMG_ELECTRODE_SIZE = 2.5;
 
   var sketch_toggle = false;
+  var optimize_toggle = false;
   var emg_dataset;
 
   main_canvas = document.getElementById("drawing");
@@ -464,12 +465,49 @@
     });
   }
 
-  function getUserSelectedData(){
-    console.log(dataset_gestures)
-    console.log(electrodeSet);
-    console.log(num_selected_channels);
-    console.log(document.getElementById('metricSelect').value);
-    console.log(document.getElementById('classifierSelect').value);
+  function getUserSelectedData() {
+    var selectedGestures = [];
+    var selectedElectrodes = [];
+
+    dataset_gestures.forEach((g, i) => {
+      if (g.selected) {
+        selectedGestures.push(i);
+      }
+    });
+
+    electrodeSet.forEach((e, i) => {
+      if (e.selected) {
+        selectedElectrodes.push(i);
+      }
+    });
+
+    // const numChannels = num_selected_channels;
+    var numChannels = parseInt(electrode_channel_slider.noUiSlider.get());
+    const metric = document.getElementById('metricSelect').value;
+    const classifier = document.getElementById('classifierSelect').value;
+    const ds = document.getElementById('datasetSelect').value
+    const dataToSend = {
+      ds, 
+      selected_gestures: selectedGestures,
+      area_no_of_channels: selectedElectrodes,
+      no_of_channels: numChannels,
+      metric: metric,
+      classifier: classifier,
+      optimize_toggle: optimize_toggle,
+    };
+
+    // Create or reuse WebSocket connection
+    if (!window.ws || window.ws.readyState !== WebSocket.OPEN) {
+      window.ws = new WebSocket("ws://127.0.0.1:8000/ws/train_model"); // Change to your server URL
+      window.ws.onopen = () => {
+        window.ws.send(JSON.stringify(dataToSend));
+      };
+      window.ws.onerror = (err) => {
+        console.error("WebSocket error:", err);
+      };
+    } else {
+      window.ws.send(JSON.stringify(dataToSend));
+    }
   }
 </script>
 

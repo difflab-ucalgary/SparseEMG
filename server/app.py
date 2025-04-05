@@ -1,8 +1,6 @@
 import os
 import shutil
-import random
 import pickle
-import asyncio
 import numpy as np
 from scipy.signal import medfilt
 from fastapi import FastAPI, WebSocket
@@ -12,7 +10,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import StratifiedKFold
 from sklearn.feature_selection import mutual_info_classif
 from scipy.signal import butter, filtfilt, iirnotch
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException
+from fastapi import FastAPI, File, UploadFile
 
 app = FastAPI()
 
@@ -104,24 +102,26 @@ def calculate_tmi(n_channels, gestures):
 
     return ranked_channels
 
-def train_model(electrodes_sorted, gestures, channel_limit):
-
-    best_channels = [electrodes_sorted[-1]]
+def train_model(electrodes_sorted, gestures, optimize_further):
 
     best_accuracy = 0
     best_f1 = 0
     best_model = None
 
-    for z in range(2, min(21, len(electrodes_sorted))):
+    if optimize_further:
+        l_start = 2
+        l_end = min(21, len(electrodes_sorted))
+    else:
+        l_start = len(electrodes_sorted) - 1
+        l_end = len(electrodes_sorted)
 
-        if len(best_channels) >= channel_limit and channel_limit != 0:
-            break
+    for z in range(l_start, l_end):
 
         print(f"Training for top {z}...")
 
         model = RandomForestClassifier(max_depth=30, random_state=42)
 
-        selected_channels = best_channels + [electrodes_sorted[-z]]
+        selected_channels = electrodes_sorted[-z:]
 
         class_map = {
             v: i for i, v in enumerate(gestures.keys())
@@ -151,8 +151,6 @@ def train_model(electrodes_sorted, gestures, channel_limit):
         accuracy = []
         f1 = []
 
-        print(model)
-
         for train_index, val_index in skf.split(features, labels):
             X_train, X_test = features[train_index], features[val_index]
             y_train, y_test = labels[train_index], labels[val_index]
@@ -169,13 +167,10 @@ def train_model(electrodes_sorted, gestures, channel_limit):
         accuracy = np.mean(accuracy)
         f1 = np.mean(f1)
 
-        if accuracy > best_accuracy:
-            best_model = model
-            best_channels = selected_channels
-            best_accuracy = accuracy
-            best_f1 = f1
-
-    best_channels = [int(channel) for channel in best_channels]
+        best_model = model
+        best_channels = selected_channels
+        best_accuracy = accuracy
+        best_f1 = f1
         
     return best_model, best_channels, best_accuracy, best_f1    
 
@@ -266,18 +261,23 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.websocket("/ws/train_model")
 async def ws_train_model(websocket: WebSocket):
+    ds_mapping = {"CSL-HDEMG": 1, "DELTA": 2, "GrabMyo": 3, "PutEMG": 4, "Hyser": 5, "Nizamis et al.": 6}
+
     await websocket.accept()
 
     # Receive first message (contains parameters)
     data = await websocket.receive_json()
 
-    ds_number = data.get("ds_number", 0) # selected dataset (mandatory)
+    ds = data.get("ds", 0) # selected dataset (mandatory)
+    ds_number = ds_mapping[ds] # map dataset name to number
     selected_gestures = data.get("selected_gestures", []) # array of gesture numbers from the dataset
     no_of_channels = data.get("no_of_channels", 0) # maximum number of channels
+    no_of_channels = int(no_of_channels)
     area_no_of_channels = data.get("area_no_of_channels", []) # channels in the selected region 
     fs = data.get("fs", 0) # sampling frequency of custom dataset (mandatory, if ds_number == 0)
     apply_preprocess = data.get("apply_preprocess", True) # apply preprocessing for custom dataset 
     ds_filename = data.get('ds_filename', None) # custom dataset file (mandatory, if ds_number == 0)
+    optimize_further = data.get("optimize_toggle", False) # optimize further (optional)
 
     error_msg = ""
 
@@ -310,10 +310,13 @@ async def ws_train_model(websocket: WebSocket):
                 if g != 0:
                     start, end = segment_gesture(sample, rest_avg_rms)
                     sample = sample[start:end]
-
+    
     electrodes_sorted = calculate_tmi(len(channels), gestures)
 
-    best_model, best_channels, best_accuracy, best_f1 = train_model(electrodes_sorted, gestures, no_of_channels)
+    if (no_of_channels != 0 and not optimize_further) or (no_of_channels != 0 and len(area_no_of_channels) == 0):
+        electrodes_sorted = electrodes_sorted[-no_of_channels:]
+
+    best_model, best_channels, best_accuracy, best_f1 = train_model(electrodes_sorted, gestures, optimize_further)
 
     if len(channels):
         channel_map = {

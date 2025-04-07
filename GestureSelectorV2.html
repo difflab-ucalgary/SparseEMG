@@ -140,7 +140,8 @@
                     Gestures: <span id="dataset_gesture_classes">-</span>
                   </div>
                   <div class="list-group-item">
-                    Number of Gestures: <span id="dataset_gestures_info">-</span>
+                    Number of Gestures:
+                    <span id="dataset_gestures_info">-</span>
                   </div>
                   <div class="list-group-item">
                     Year: <span id="dataset_year">-</span>
@@ -183,8 +184,20 @@
                 </div>
 
                 <div class="mb-3">
-                  <label class="form-label">Electrode Channels</label>
-                  <div id="electrode_channel_slider" class="mt-3"></div>
+                  <label for="electrode_channel_slider"
+                    >Channel Limit: <span id="channel_limit">0</span></label
+                  >
+                  <input
+                    class="form-range"
+                    type="range"
+                    id="electrode_channel_slider"
+                    name="channel_limit"
+                    min="0"
+                    max="100"
+                    step="1"
+                    value="0"
+                    oninput="channel_limit.innerText = this.value"
+                  />
                 </div>
 
                 <div class="mb-3">
@@ -193,7 +206,7 @@
                       class="form-check-input"
                       type="checkbox"
                       id="sketch_toggle"
-                      checked
+                      onchange="sketch_toggle = this.checked"
                     />
                     <label class="form-check-label" for="sketch_toggle"
                       >Enable Sketching</label
@@ -204,6 +217,7 @@
                       class="form-check-input"
                       type="checkbox"
                       id="optimize_toggle"
+                      onchange="optimize_toggle = this.checked"
                     />
                     <label class="form-check-label" for="optimize_toggle"
                       >Enable Optimization</label
@@ -250,7 +264,7 @@
               <div
                 id="gesture-container"
                 class="row row-cols-1 g-2"
-                style="height: 600px; overflow-y: auto"
+                style="height: 300px; overflow-y: auto"
               ></div>
             </div>
             <div class="card-footer d-grid">
@@ -258,7 +272,7 @@
                 class="generate-btn d-grid"
                 onclick="getUserSelectedData()"
               >
-                Generate Analysis
+                Generate
               </button>
             </div>
           </div>
@@ -355,7 +369,7 @@
         dataset_publication.innerHTML = data.publication_venue_short;
       }
 
-      function resetDatasetDetails(){
+      function resetDatasetDetails() {
         dataset_name.innerHTML = "-";
         dataset_electrodes.innerHTML = "-";
         dataset_gesture_classes.innerHTML = "-";
@@ -365,7 +379,7 @@
         main_canvas.clear();
         const container = document.getElementById("gesture-container");
         container.innerHTML = "";
-    }
+      }
 
       // Modified loadDataset function
       function loadDataset(jsonFile) {
@@ -381,6 +395,9 @@
             renderDatasetDetails(data);
             renderGestureImages(data);
             renderDatasetElectrodes(data);
+
+            const slider = document.getElementById("electrode_channel_slider");
+            slider.max = data.number_of_electrodes;
           });
       }
 
@@ -394,8 +411,12 @@
             <h6 class="text-primary mb-3">${gestureClass.class_name}</h6>
             <div class="row g-2">
               ${gestureClass.gestures
-                .map(
-                  (gesture) => `
+                .map((gesture) => {
+                  dataset_gestures.push({
+                    gesture_name: gesture.gesture_name,
+                    selected: false,
+                  });
+                  return `
                 <div class="col-4 col-md-3">
                   <div class="gesture-img-wrapper text-center">
                     <img src="${gesture.illustration}" 
@@ -405,8 +426,8 @@
                     <small class="text-muted d-block mt-1">${gesture.gesture_name}</small>
                   </div>
                 </div>
-              `
-                )
+              `;
+                })
                 .join("")}
             </div>
           </div>
@@ -477,7 +498,7 @@
         });
 
         // const numChannels = num_selected_channels;
-        var numChannels = parseInt(electrode_channel_slider.noUiSlider.get());
+        var numChannels = parseInt(electrode_channel_slider.value);
         const metric = document.getElementById("metricSelect").value;
         const classifier = document.getElementById("classifierSelect").value;
         const ds = document.getElementById("datasetSelect").value;
@@ -490,6 +511,27 @@
           classifier: classifier,
           optimize_toggle: optimize_toggle,
         };
+        // Create or reuse WebSocket connection
+        if (!window.ws || window.ws.readyState !== WebSocket.OPEN) {
+          window.ws = new WebSocket("ws://127.0.0.1:8000/ws/train_model");
+
+          window.ws.onopen = () => {
+            window.ws.send(JSON.stringify(dataToSend));
+          };
+
+          window.ws.onmessage = (event) => {
+            console.log("Received from server:", event.data);
+            // Optionally, parse and display the data:
+            const response = JSON.parse(event.data);
+            // Do something with `response`, e.g. update the UI
+          };
+
+          window.ws.onerror = (err) => {
+            console.error("WebSocket error:", err);
+          };
+        } else {
+          window.ws.send(JSON.stringify(dataToSend));
+        }
       }
     </script>
 

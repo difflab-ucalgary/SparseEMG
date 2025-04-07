@@ -61,10 +61,7 @@ def get_data(ds_number, selected_gestures, channels, ds_filename):
                 del gestures[g]
 
     if len(channels):
-        for g in gestures.keys():
-            for sample in gestures[g]:
-                sample = sample[:, channels]
-
+        gestures = {g: [sample[:, channels] for sample in gestures[g]] for g in gestures.keys()}
     return gestures
 
 def calculate_rms(window):
@@ -98,7 +95,7 @@ def calculate_features(gestures, channels=None):
         for sample in gestures[g]:
             feature_set = []
             window_len = (len(sample) // 3)
-            if channels is not None:
+            if channels is None:
                 windows = [sample[window_len * i:window_len * (i + 1)] for i in range(3)]
             else:
                 windows = [sample[window_len * i:window_len * (i + 1), channels] for i in range(3)]
@@ -379,8 +376,8 @@ def train_model(electrodes_sorted, gestures, optimize_further, model_name):
         l_start = 2
         l_end = min(21, len(electrodes_sorted))
     else:
-        l_start = len(electrodes_sorted) - 1
-        l_end = len(electrodes_sorted)
+        l_start = len(electrodes_sorted)
+        l_end = len(electrodes_sorted) + 1
 
     for z in range(l_start, l_end):
 
@@ -579,6 +576,6 @@ async def ws_train_model(websocket: WebSocket):
         }
         best_channels = [channel_map[channel] for channel in best_channels]
 
-    await websocket.send_json({"best_channels": list(best_channels), "accuracy": float(best_accuracy), "f1": float(best_f1)})
+    await websocket.send_json({"best_channels": best_channels.tolist(), "accuracy": float(best_accuracy), "f1": float(best_f1)})
 
     await websocket.close()

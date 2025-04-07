@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EMG Dataset Viewer</title>
+
+    <!-- Bootstrap 5 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="js/libs/snap.svg.js"></script>
+    <script src="js/sparseEMGClasses/Renderer.js"></script>
+
+    <!-- Material Icons -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+      rel="stylesheet"
+    />
+
+    <!-- Custom Styles -->
+    <style>
+      .main-card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        transition: transform 0.2s;
+        min-height: 800px;
+      }
+
+      .main-card:hover {
+        transform: translateY(-2px);
+      }
+
+      .gesture-img {
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+      }
+
+      .gesture-img.selected {
+        border-color: #0d6efd;
+        box-shadow: 0 0 8px rgba(13, 110, 253, 0.4);
+      }
+
+      .canvas-container {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        background: white;
+      }
+
+      .control-header {
+        font-weight: 600;
+        color: #2c3e50;
+      }
+
+      .generate-btn {
+        background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+        color: white;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .generate-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+      }
+      .inline-icon {
+        vertical-align: bottom;
+      }
+    </style>
+
+    <style>
+      .electrode-point {
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .electrode-point.selected {
+        fill: #4caf50 !important;
+        stroke: #2e7d32 !important;
+        filter: drop-shadow(0 0 2px rgba(76, 175, 80, 0.5));
+      }
+    </style>
+
+    <!-- Previous CSS links and scripts remain the same -->
+  </head>
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <img
+            src="icons/tool_icon_v1.png"
+            alt="Logo"
+            height="40"
+            class="me-2"
+          />
+          <span class="h4 mb-0">SparseEMG</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="container mb-4">
+      <div class="row g-4 d-flex align-items-stretch">
+        <!-- Left Control Panel -->
+        <div class="col-lg-3">
+          <div class="card main-card">
+            <div class="card-body">
+              <h5 class="control-header mb-3">
+                <span class="inline-icon material-icons-outlined">folder</span>
+                Dataset Selection
+              </h5>
+              <div class="mb-3">
+                <label class="form-label">Select Dataset</label>
+                <select class="form-select" id="datasetSelect">
+                  <option value="">Choose dataset...</option>
+                  <option value="CSL-HDEMG">CSL-HDEMG</option>
+                  <option value="PutEMG">PutEMG</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <h5 class="control-header">
+                  <span class="inline-icon material-icons-outlined">info</span>
+                  Dataset Details
+                </h5>
+                <div class="list-group list-group-flush">
+                  <div class="list-group-item">
+                    Name: <span id="dataset_name" class="fw-medium">-</span>
+                  </div>
+                  <div class="list-group-item">
+                    Electrodes: <span id="dataset_electrodes">-</span>
+                  </div>
+                  <div class="list-group-item">
+                    Gestures: <span id="dataset_gesture_classes">-</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Model Parameters -->
+              <div class="mt-4">
+                <h5 class="control-header mb-3">
+                  <span class="inline-icon material-icons-outlined"
+                    >settings</span
+                  >
+                  Model Parameters
+                </h5>
+
+                <div class="mb-3">
+                  <label class="form-label">Metric</label>
+                  <select class="form-select" id="metricSelect">
+                    <option value="permutation_importance">
+                      Permutation Importance
+                    </option>
+                    <option value="rms">RMS</option>
+                    <option value="mutual_importance">Mutual Importance</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Classifier</label>
+                  <select class="form-select" id="classifierSelect">
+                    <option value="logistic_regression">
+                      Logistic Regression
+                    </option>
+                    <option value="random_forest">Random Forest</option>
+                    <option value="SVC">Support Vector Machine</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Electrode Channels</label>
+                  <div id="electrode_channel_slider" class="mt-3"></div>
+                </div>
+
+                <div class="mb-3">
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="sketch_toggle"
+                      checked
+                    />
+                    <label class="form-check-label" for="sketch_toggle"
+                      >Enable Sketching</label
+                    >
+                  </div>
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="optimize_toggle"
+                    />
+                    <label class="form-check-label" for="optimize_toggle"
+                      >Enable Optimization</label
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Canvas -->
+        <div class="col-lg-6">
+          <div class="card main-card">
+            <div class="card-body">
+              <h5 class="control-header mb-3">Visualization Canvas</h5>
+              <div class="canvas-container position-relative">
+                <svg
+                  id="drawing"
+                  class="img-fluid"
+                  viewBox="0 0 350 400"
+                  style="background-color: #f8f9fa; border-radius: 8px"
+                >
+                  <!-- Grid will be rendered here -->
+                </svg>
+                <div class="position-absolute top-0 end-0 mt-2 me-3">
+                  <div class="badge bg-primary">Click electrodes to select</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Gesture Selection -->
+        <div class="col-lg-3">
+          <div class="card main-card">
+            <div class="card-body">
+              <h5 class="control-header mb-3">
+                <span class="inline-icon material-icons-outlined"
+                  >waving_hand</span
+                >
+                Gesture Selection
+              </h5>
+              <div
+                id="gesture-container"
+                class="row row-cols-1 g-2"
+                style="height: 600px; overflow-y: auto"
+              ></div>
+            </div>
+            <div class="card-footer d-grid">
+              <button
+                class="generate-btn d-grid"
+                onclick="getUserSelectedData()"
+              >
+                Generate Analysis
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <script>
+  // Initialize canvas and electrode interaction
+  let main_canvas = Snap("#drawing");
+  let electrodeSet = [];
+  
+  function renderDatasetElectrodes(data) {
+    Snap.load(data.electrode_placement_illustration, function(fragment) {
+      main_canvas.clear();
+      main_canvas.add(fragment);
+      
+      // Add interaction to electrode points
+      main_canvas.selectAll("circle, rect, path").forEach(element => {
+        const elementId = element.attr("id") || `electrode-${Math.random().toString(36).substr(2, 9)}`;
+        element.attr({ id: elementId });
+        element.addClass("electrode-point");
+        
+        element.click(function() {
+          const currentElectrode = electrodeSet.find(e => e.id === elementId);
+          currentElectrode.selected = !currentElectrode.selected;
+          
+          if (currentElectrode.selected) {
+            element.attr({ fill: "#4CAF50", stroke: "#2E7D32" });
+            element.addClass("selected");
+          } else {
+            element.attr({ fill: "#000", stroke: "#000" });
+            element.removeClass("selected");
+          }
+        });
+        
+        electrodeSet.push({ id: elementId, selected: false });
+      });
+      
+      // Add grid lines
+      Renderer.RenderGridWithLines(main_canvas);
+    });
+  }
+
+  // Update loadDataset function
+  function loadDataset(jsonFile) {
+    fetch(jsonFile)
+      .then(response => response.json())
+      .then(data => {
+        renderDatasetDetails(data);
+        renderGestureImages(data);
+        renderDatasetElectrodes(data); // Add this line back
+      });
+  }
+</script> -->
+
+    <script>
+      var MAIN_CANVAS_SVG_WIDTH = 400;
+      var MAIN_CANVAS_SVG_HEIGHT = 400;
+      var EMG_ELECTRODE_SIZE = 2.5;
+
+      var sketch_toggle = false;
+      var optimize_toggle = false;
+      var emg_dataset;
+
+      // main_canvas = document.getElementById("drawing");
+      // main_canvas = Snap(main_canvas);
+      // Renderer.RenderGridWithLines(main_canvas);
+
+      // Initialize main canvas
+      let main_canvas = Snap("#drawing");
+      let electrodeSet = [];
+      let dataset_gestures = [];
+
+      document
+        .getElementById("datasetSelect")
+        .addEventListener("change", function () {
+          const selectedDataset = this.value;
+          if (selectedDataset === "CSL-HDEMG") {
+            loadDataset("./datasets/CSL-HDEMG/dataset_metadata.json");
+          } else if (selectedDataset === "PutEMG") {
+            loadDataset("./datasets/putEMG/dataset_metadata_putemg.json");
+          } else if (selectedDataset === "") {
+            resetDatasetDetails();
+          }
+        });
+
+      function renderDatasetDetails(data) {
+        dataset_name.innerHTML = "Dataset: " + data.dataset_name;
+        dataset_electrodes.innerHTML =
+          "Electrodes:" + data.number_of_electrodes + "";
+        dataset_gesture_classes.innerHTML =
+          "Gesture Classes: " + data.gesture_classes.length;
+        // dataset_gestures_info.innerHTML = "Number of Gestures: " + data.number_of_gestures;
+        // dataset_year.innerHTML = "Year: " + data.year + "";
+        // dataset_publication.innerHTML = "Publication Venue:" + data.publication_venue_short + " ";
+      }
+
+      function resetDatasetDetails(){
+        dataset_name.innerHTML = "-";
+        dataset_electrodes.innerHTML = "-";
+        dataset_gesture_classes.innerHTML = "Gesture Classes:" + " ";
+        // dataset_gestures_info.innerHTML = "Number of Gestures:" + " ";
+        // dataset_year.innerHTML = "Year:" + " ";
+        // dataset_publication.innerHTML = "Publication Venue:" + " ";
+        main_canvas.clear();
+    }
+
+      // Modified loadDataset function
+      function loadDataset(jsonFile) {
+        fetch(jsonFile)
+          .then((response) => response.json())
+          .then((data) => {
+            // Clear previous data
+            dataset_gestures = [];
+            main_canvas.clear();
+            Renderer.RenderGridWithLines(main_canvas);
+
+            // Update dataset info
+            renderDatasetDetails(data);
+            renderGestureImages(data);
+            renderDatasetElectrodes(data);
+          });
+      }
+
+      // Updated renderGestureImages function
+      //   function renderGestureImages(data) {
+      //     const container = document.getElementById("gesture-container");
+      //     container.innerHTML = "";
+
+      //     data.gesture_classes.forEach((gestureClass) => {
+      //       const classHtml = `
+      //       <div class="col-12">
+      //         <h6 class="text-primary mb-3">${gestureClass.class_name}</h6>
+      //         <div class="row g-4">
+      //           ${gestureClass.gestures
+      //             .map(
+      //               (gesture) => `
+      //             <div class="col">
+      //               <div class="card gesture-card" data-gesture="${gesture.gesture_name}">
+      //                 <img src="${gesture.illustration}"
+      //                      alt="${gesture.gesture_name}"
+      //                      style="height: 100px;object-fit: contain;">
+      //                 <div class="card-footer text-center">
+      //                   <small class="text-muted">${gesture.gesture_name}</small>
+      //                 </div>
+      //               </div>
+      //             </div>
+      //           `
+      //             )
+      //             .join("")}
+      //         </div>
+      //       </div>
+      //     `;
+      //       container.insertAdjacentHTML("beforeend", classHtml);
+
+      //       // Initialize gesture selection
+      //       gestureClass.gestures.forEach((gesture) => {
+      //         dataset_gestures.push({
+      //           gesture_name: gesture.gesture_name,
+      //           selected: false,
+      //         });
+      //       });
+      //     });
+
+      //     // Add click handlers using event delegation
+      //     container.addEventListener("click", (event) => {
+      //         console.log("gesture clicked");
+      //       const card = event.target.closest(".gesture-card");
+      //       if (card) {
+      //         card.classList.toggle("selected");
+      //         const gestureName = card.dataset.gesture;
+      //         const index = dataset_gestures.findIndex(
+      //           (g) => g.gesture_name === gestureName
+      //         );
+      //         if (index !== -1) {
+      //           dataset_gestures[index].selected =
+      //             !dataset_gestures[index].selected;
+      //         }
+      //       }
+      //     });
+      //   }
+
+      function renderGestureImages(data) {
+        const container = document.getElementById("gesture-container");
+        container.innerHTML = "";
+
+        data.gesture_classes.forEach((gestureClass) => {
+          const classHtml = `
+          <div class="col-12 mb-4">
+            <h6 class="text-primary mb-3">${gestureClass.class_name}</h6>
+            <div class="row g-2">
+              ${gestureClass.gestures
+                .map(
+                  (gesture) => `
+                <div class="col-4 col-md-3">
+                  <div class="gesture-img-wrapper text-center">
+                    <img src="${gesture.illustration}" 
+                         class="gesture-img img-fluid rounded"
+                         data-gesture="${gesture.gesture_name}"
+                         title="${gesture.gesture_name}">
+                    <small class="text-muted d-block mt-1">${gesture.gesture_name}</small>
+                  </div>
+                </div>
+              `
+                )
+                .join("")}
+            </div>
+          </div>
+        `;
+          container.insertAdjacentHTML("beforeend", classHtml);
+        });
+
+        // Add click handlers
+        container.querySelectorAll(".gesture-img").forEach((img) => {
+          img.addEventListener("click", function () {
+            this.classList.toggle("selected");
+            const gestureName = this.dataset.gesture;
+            const index = dataset_gestures.findIndex(
+              (g) => g.gesture_name === gestureName
+            );
+            if (index !== -1) {
+              dataset_gestures[index].selected =
+                !dataset_gestures[index].selected;
+            }
+          });
+        });
+      }
+
+      // Electrode rendering function
+      function renderDatasetElectrodes(data) {
+        Snap.load(data.electrode_placement_illustration, function (fragment) {
+          main_canvas.append(fragment);
+
+          main_canvas.selectAll("*[id]").forEach((element) => {
+            const elementId = element.attr("id");
+            element.addClass("electrode-point");
+
+            element.click(function () {
+              const currentElectrode = electrodeSet.find(
+                (e) => e.id === elementId
+              );
+              if (!currentElectrode) {
+                electrodeSet.push({ id: elementId, selected: true });
+                element.addClass("selected");
+                element.attr({ fill: "#4CAF50", stroke: "#2E7D32" });
+              } else {
+                currentElectrode.selected = !currentElectrode.selected;
+                element.toggleClass("selected");
+                element.attr({
+                  fill: currentElectrode.selected ? "#4CAF50" : "#000",
+                  stroke: currentElectrode.selected ? "#2E7D32" : "#000",
+                });
+              }
+            });
+          });
+        });
+      }
+
+      function getUserSelectedData() {
+        var selectedGestures = [];
+        var selectedElectrodes = [];
+
+        dataset_gestures.forEach((g, i) => {
+          if (g.selected) {
+            selectedGestures.push(i);
+          }
+        });
+
+        electrodeSet.forEach((e, i) => {
+          if (e.selected) {
+            selectedElectrodes.push(i);
+          }
+        });
+
+        // const numChannels = num_selected_channels;
+        var numChannels = parseInt(electrode_channel_slider.noUiSlider.get());
+        const metric = document.getElementById("metricSelect").value;
+        const classifier = document.getElementById("classifierSelect").value;
+        const ds = document.getElementById("datasetSelect").value;
+        const dataToSend = {
+          ds,
+          selected_gestures: selectedGestures,
+          area_no_of_channels: selectedElectrodes,
+          no_of_channels: numChannels,
+          metric: metric,
+          classifier: classifier,
+          optimize_toggle: optimize_toggle,
+        };
+      }
+    </script>
+
+    <!-- Rest of the original JavaScript remains unchanged -->
+  </body>
+</html>

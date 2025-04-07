@@ -139,6 +139,15 @@
                   <div class="list-group-item">
                     Gestures: <span id="dataset_gesture_classes">-</span>
                   </div>
+                  <div class="list-group-item">
+                    Number of Gestures: <span id="dataset_gestures_info">-</span>
+                  </div>
+                  <div class="list-group-item">
+                    Year: <span id="dataset_year">-</span>
+                  </div>
+                  <div class="list-group-item">
+                    Publication Venue: <span id="dataset_publication">-</span>
+                  </div>
                 </div>
               </div>
 
@@ -338,24 +347,24 @@
         });
 
       function renderDatasetDetails(data) {
-        dataset_name.innerHTML = "Dataset: " + data.dataset_name;
-        dataset_electrodes.innerHTML =
-          "Electrodes:" + data.number_of_electrodes + "";
-        dataset_gesture_classes.innerHTML =
-          "Gesture Classes: " + data.gesture_classes.length;
-        // dataset_gestures_info.innerHTML = "Number of Gestures: " + data.number_of_gestures;
-        // dataset_year.innerHTML = "Year: " + data.year + "";
-        // dataset_publication.innerHTML = "Publication Venue:" + data.publication_venue_short + " ";
+        dataset_name.innerHTML = data.dataset_name;
+        dataset_electrodes.innerHTML = data.number_of_electrodes;
+        dataset_gesture_classes.innerHTML = data.gesture_classes.length;
+        dataset_gestures_info.innerHTML = data.number_of_gestures;
+        dataset_year.innerHTML = data.year;
+        dataset_publication.innerHTML = data.publication_venue_short;
       }
 
       function resetDatasetDetails(){
         dataset_name.innerHTML = "-";
         dataset_electrodes.innerHTML = "-";
-        dataset_gesture_classes.innerHTML = "Gesture Classes:" + " ";
-        // dataset_gestures_info.innerHTML = "Number of Gestures:" + " ";
-        // dataset_year.innerHTML = "Year:" + " ";
-        // dataset_publication.innerHTML = "Publication Venue:" + " ";
+        dataset_gesture_classes.innerHTML = "-";
+        dataset_gestures_info.innerHTML = "-";
+        dataset_year.innerHTML = "-";
+        dataset_publication.innerHTML = "-";
         main_canvas.clear();
+        const container = document.getElementById("gesture-container");
+        container.innerHTML = "";
     }
 
       // Modified loadDataset function
@@ -374,64 +383,6 @@
             renderDatasetElectrodes(data);
           });
       }
-
-      // Updated renderGestureImages function
-      //   function renderGestureImages(data) {
-      //     const container = document.getElementById("gesture-container");
-      //     container.innerHTML = "";
-
-      //     data.gesture_classes.forEach((gestureClass) => {
-      //       const classHtml = `
-      //       <div class="col-12">
-      //         <h6 class="text-primary mb-3">${gestureClass.class_name}</h6>
-      //         <div class="row g-4">
-      //           ${gestureClass.gestures
-      //             .map(
-      //               (gesture) => `
-      //             <div class="col">
-      //               <div class="card gesture-card" data-gesture="${gesture.gesture_name}">
-      //                 <img src="${gesture.illustration}"
-      //                      alt="${gesture.gesture_name}"
-      //                      style="height: 100px;object-fit: contain;">
-      //                 <div class="card-footer text-center">
-      //                   <small class="text-muted">${gesture.gesture_name}</small>
-      //                 </div>
-      //               </div>
-      //             </div>
-      //           `
-      //             )
-      //             .join("")}
-      //         </div>
-      //       </div>
-      //     `;
-      //       container.insertAdjacentHTML("beforeend", classHtml);
-
-      //       // Initialize gesture selection
-      //       gestureClass.gestures.forEach((gesture) => {
-      //         dataset_gestures.push({
-      //           gesture_name: gesture.gesture_name,
-      //           selected: false,
-      //         });
-      //       });
-      //     });
-
-      //     // Add click handlers using event delegation
-      //     container.addEventListener("click", (event) => {
-      //         console.log("gesture clicked");
-      //       const card = event.target.closest(".gesture-card");
-      //       if (card) {
-      //         card.classList.toggle("selected");
-      //         const gestureName = card.dataset.gesture;
-      //         const index = dataset_gestures.findIndex(
-      //           (g) => g.gesture_name === gestureName
-      //         );
-      //         if (index !== -1) {
-      //           dataset_gestures[index].selected =
-      //             !dataset_gestures[index].selected;
-      //         }
-      //       }
-      //     });
-      //   }
 
       function renderGestureImages(data) {
         const container = document.getElementById("gesture-container");

@@ -172,8 +172,6 @@ def find_intersection_with_indices(arrays, threshold=1.0):
         list: A list of tuples where each tuple contains an intersected item
               and its indices in each array.
     """
-    # if not arrays or len(arrays) < 2:
-    #     return []  # No intersection possible
 
     num_arrays = len(arrays)
     min_occurrences = int(threshold * num_arrays)
@@ -285,10 +283,9 @@ def calculate_rms_rankings(gestures):
 
     return ranked_channels
 
-def calculate_tmi_rankings(n_channels, gestures):
+def calculate_tmi_rankings(gestures):
 
-    if n_channels == 0:
-        n_channels = gestures[0][0].shape[1]
+    n_channels = gestures[0][0].shape[1]
 
     features, labels = calculate_features(gestures)
 
@@ -302,11 +299,10 @@ def calculate_tmi_rankings(n_channels, gestures):
 
     return ranked_channels
 
-def calculate_pi_rankings(model_name, n_channels, gestures):
+def calculate_pi_rankings(model_name, gestures):
      
-    if n_channels == 0:
-        n_channels = gestures[0][0].shape[1]
-        
+    n_channels = gestures[0][0].shape[1]
+
     features, labels = calculate_features(gestures)
 
     skf = StratifiedKFold(n_splits=4, shuffle=True, random_state=42)
@@ -339,7 +335,9 @@ def calculate_pi_rankings(model_name, n_channels, gestures):
 
     return ranked_channels
 
-def calculate_shap_rankings(model_name, n_channels, gestures): 
+def calculate_shap_rankings(model_name, gestures): 
+
+    n_channels = gestures[0][0].shape[1]
 
     features, labels = calculate_features(gestures)
 
@@ -382,7 +380,7 @@ def train_model(electrodes_sorted, gestures, optimize_further, model_name):
 
     if optimize_further:
         l_start = 2
-        l_end = min(21, len(electrodes_sorted))
+        l_end = min(21, len(electrodes_sorted) + 1)
     else:
         l_start = len(electrodes_sorted)
         l_end = len(electrodes_sorted) + 1
@@ -418,12 +416,13 @@ def train_model(electrodes_sorted, gestures, optimize_further, model_name):
         accuracy = np.mean(accuracy)
         f1 = np.mean(f1)
 
-        best_model = model
-        best_channels = selected_channels
-        best_accuracy = accuracy
-        best_f1 = f1
-        y_pred = cross_val_predict(best_model, features, labels, cv=4)
-        best_cm = confusion_matrix(labels, y_pred)
+        if accuracy > best_accuracy:
+            best_model = model
+            best_channels = selected_channels
+            best_accuracy = accuracy
+            best_f1 = f1
+            y_pred = cross_val_predict(best_model, features, labels, cv=skf)
+            best_cm = confusion_matrix(labels, y_pred)
         
     return best_model, best_channels, best_accuracy, best_f1, best_cm 
 
@@ -547,7 +546,7 @@ async def ws_train_model(websocket: WebSocket):
         await websocket.close()
 
     if len(area_no_of_channels):
-        channels = area_no_of_channels
+        channels = [int(channel) for channel in area_no_of_channels]
     else:
         channels = []
     
@@ -571,12 +570,14 @@ async def ws_train_model(websocket: WebSocket):
     elif metric == "Mutual Information":
         electrodes_sorted = calculate_tmi_rankings(no_of_channels, gestures)
     elif metric == "SHAP": 
-        electrodes_sorted = calculate_shap_rankings(classifier, no_of_channels, gestures)
+        electrodes_sorted = calculate_shap_rankings(classifier, gestures)
     else:
-        electrodes_sorted = calculate_pi_rankings(classifier, no_of_channels, gestures)
+        electrodes_sorted = calculate_pi_rankings(classifier, gestures)
 
     if (no_of_channels != 0 and not optimize_further) or (no_of_channels != 0 and len(area_no_of_channels) == 0):
         electrodes_sorted = electrodes_sorted[-no_of_channels:]
+    
+    optimize_further = optimize_further or (no_of_channels == 0 and len(area_no_of_channels) == 0)
 
     best_model, best_channels, best_accuracy, best_f1, best_cm = train_model(electrodes_sorted, gestures, optimize_further, classifier)
 
@@ -584,8 +585,8 @@ async def ws_train_model(websocket: WebSocket):
         channel_map = {
             i: v for i, v in enumerate(channels) 
         }
-        best_channels = [channel_map[channel] for channel in best_channels]
+        best_channels = np.array([channel_map[channel] for channel in best_channels])
 
-    await websocket.send_json({"best_channels": best_channels.tolist(), "accuracy": float(best_accuracy), "f1": float(best_f1), "cm": best_cm.tolist()})
+    await websocket.send_json({"best_channels": best_channels.tolist(), "accuracy": round(float(best_accuracy) * 100, 2), "f1": float(best_f1), "cm": best_cm.tolist()})
 
     await websocket.close()

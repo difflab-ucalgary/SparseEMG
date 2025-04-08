@@ -86,6 +86,28 @@
         stroke: #2e7d32 !important;
         filter: drop-shadow(0 0 2px rgba(76, 175, 80, 0.5));
       }
+      body {
+        background-color: #f8f9fa;
+      }
+      .heatmap-table {
+        border-collapse: collapse;
+      }
+      .heatmap-table td,
+      .heatmap-table th {
+        width: 60px;
+        height: 60px;
+        text-align: center;
+        vertical-align: middle;
+        border: 1px solid #dee2e6;
+        font-weight: bold;
+        font-family: "Segoe UI", sans-serif;
+        font-size: 12px; /* smaller font */
+        padding: 0;
+      }
+      .heatmap-table th {
+        background-color: #e9ecef;
+        color: #212529;
+      }
     </style>
 
     <!-- Previous CSS links and scripts remain the same -->
@@ -108,7 +130,7 @@
     <div class="container mb-4">
       <div class="row g-4 d-flex align-items-stretch">
         <!-- Left Control Panel -->
-        <div class="col-lg-3">
+        <div class="col-lg-3 px-0">
           <div class="card main-card">
             <div class="card-body">
               <h5 class="control-header mb-3">
@@ -252,7 +274,7 @@
         </div>
 
         <!-- Right Gesture Selection -->
-        <div class="col-lg-3">
+        <div class="col-lg-3 px-0">
           <div class="card main-card">
             <div class="card-body">
               <h5 class="control-header mb-3">
@@ -267,12 +289,25 @@
                 style="height: 300px; overflow-y: auto"
               ></div>
             </div>
-            <div class="card-footer d-grid">
+            <div id="confusion-matrix-card">
+              <table class="heatmap-table" id="confusion-matrix"></table>
+              <div class="card-body">
+                <h5 class="card-title text-center" id="predicted_accuracy">
+                </h5>
+              </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between gap-2">
               <button
-                class="generate-btn d-grid"
+                class="generate-btn flex-fill"
                 onclick="getUserSelectedData()"
               >
-                Generate
+                Generate layout
+              </button>
+              <button
+                class="generate-btn flex-fill"
+                onclick="getUserSelectedData()"
+              >
+                Generate stencil
               </button>
             </div>
           </div>
@@ -338,10 +373,6 @@
       var optimize_toggle = false;
       var emg_dataset;
 
-      // main_canvas = document.getElementById("drawing");
-      // main_canvas = Snap(main_canvas);
-      // Renderer.RenderGridWithLines(main_canvas);
-
       // Initialize main canvas
       let main_canvas = Snap("#drawing");
       let electrodeSet = [];
@@ -357,6 +388,7 @@
             loadDataset("./datasets/putEMG/dataset_metadata_putemg.json");
           } else if (selectedDataset === "") {
             resetDatasetDetails();
+            resetConfusionMatrix();
           }
         });
 
@@ -414,6 +446,7 @@
                 .map((gesture) => {
                   dataset_gestures.push({
                     gesture_name: gesture.gesture_name,
+                    id: gesture.id,
                     selected: false,
                   });
                   return `
@@ -485,15 +518,15 @@
         var selectedGestures = [];
         var selectedElectrodes = [];
 
-        dataset_gestures.forEach((g, i) => {
+        dataset_gestures.forEach((g) => {
           if (g.selected) {
-            selectedGestures.push(i);
+            selectedGestures.push(g.id);
           }
         });
 
-        electrodeSet.forEach((e, i) => {
+        electrodeSet.forEach((e) => {
           if (e.selected) {
-            selectedElectrodes.push(i);
+            selectedElectrodes.push(e.id.split("_")[1]);
           }
         });
 
@@ -520,10 +553,22 @@
           };
 
           window.ws.onmessage = (event) => {
-            console.log("Received from server:", event.data);
-            // Optionally, parse and display the data:
             const response = JSON.parse(event.data);
-            // Do something with `response`, e.g. update the UI
+            var labels = []
+            dataset_gestures.forEach(g => {
+              if (g.selected || g.id === 0) {
+                labels.push(g.gesture_name);
+              }
+            });
+            selectActiveElectrodes(
+              response.best_channels
+            );
+            resetConfusionMatrix();
+            renderConfusionMatrix(
+              response.accuracy,
+              response.cm,
+              labels,
+            )
           };
 
           window.ws.onerror = (err) => {
@@ -532,6 +577,94 @@
         } else {
           window.ws.send(JSON.stringify(dataToSend));
         }
+      }
+      
+      function getHeatmapColor(val, maxVal) {
+        const t = val / maxVal;
+        const r = Math.round(8 + (255 - 8) * (1 - t));
+        const g = Math.round(48 + (255 - 48) * (1 - t));
+        const b = Math.round(107 + (255 - 107) * (1 - t));
+        return `rgb(${r}, ${g}, ${b})`;
+      }
+
+      function getTextColor(bgColor) {
+        const rgb = bgColor.match(/\d+/g).map(Number);
+        const luminance = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2];
+        return luminance < 140 ? "white" : "black";
+      }
+
+      function renderConfusionMatrix(accuracy, matrix, labels) {
+        const maxVal = Math.max(...matrix.flat());
+        
+        const cm_card = document.getElementById("confusion-matrix-card");
+        cm_card.classList.add("card");
+
+        const predicted_accuracy = document.getElementById(
+          "predicted_accuracy"
+        );
+        predicted_accuracy.innerText = `Predicted Accuracy: ${accuracy}%`;
+
+        const table = document.getElementById("confusion-matrix");
+
+        // Create header row
+        const headerRow = document.createElement("tr");
+        const cornerTh = document.createElement("th");
+        cornerTh.innerText = "Actual";
+        headerRow.appendChild(cornerTh);
+
+        labels.forEach((label) => {
+          const th = document.createElement("th");
+          th.innerText = label;
+          headerRow.appendChild(th);
+        });
+
+        table.appendChild(headerRow);
+
+        // Create rows
+        matrix.forEach((row, i) => {
+          const tr = document.createElement("tr");
+
+          const rowLabel = document.createElement("th");
+          rowLabel.innerText = labels[i];
+          tr.appendChild(rowLabel);
+
+          row.forEach((val) => {
+            const td = document.createElement("td");
+            const bgColor = getHeatmapColor(val, maxVal);
+            const textColor = getTextColor(bgColor);
+
+            td.style.backgroundColor = bgColor;
+            td.style.color = textColor;
+            td.innerText = val;
+
+            tr.appendChild(td);
+          });
+
+          table.appendChild(tr);
+        });
+      }
+      function resetConfusionMatrix() {
+        const table = document.getElementById("confusion-matrix");
+        table.innerHTML = ""; // Clear the table content
+        const cm_card = document.getElementById("confusion-matrix-card");
+        cm_card.classList.remove("card");
+        const predicted_accuracy = document.getElementById(
+          "predicted_accuracy"
+        );
+        predicted_accuracy.innerText = ""; // Clear the accuracy text
+      };
+
+      function selectActiveElectrodes(selectedElectrodes) {
+        main_canvas.selectAll(".electrode-point").forEach((element) => {
+          const elementId = Number(element.attr("id").split("_")[1]);
+          if (selectedElectrodes.includes(elementId)) {
+            element.addClass("selected");
+            element.attr({ fill: "#4CAF50", stroke: "#2E7D32" });
+          } else {
+            element.removeClass("selected");
+            element.attr({ fill: "#000", stroke: "#000" });
+          }
+        });
       }
     </script>
 

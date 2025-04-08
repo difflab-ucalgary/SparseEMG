@@ -6,9 +6,10 @@ from scipy.signal import medfilt
 from fastapi import FastAPI, WebSocket
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from sklearn.metrics import accuracy_score, f1_score
 from scipy.signal import butter, filtfilt, iirnotch
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import StratifiedKFold, cross_val_predict
+from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
+
 
 # classifiers
 import xgboost as xgb
@@ -60,9 +61,19 @@ def get_data(ds_number, selected_gestures, channels, ds_filename):
             if g != 0 and g not in selected_gestures:
                 del gestures[g]
 
+    class_map = {
+        v: i for i, v in enumerate(gestures.keys())
+    }
+
+    gestures_mapped = {}
+
+    for g in gestures.keys():
+        gestures_mapped[class_map[g]] = gestures[g]
+
     if len(channels):
-        gestures = {g: [sample[:, channels] for sample in gestures[g]] for g in gestures.keys()}
-    return gestures
+        gestures_mapped = {g: [sample[:, channels] for sample in gestures_mapped[g]] for g in gestures_mapped.keys()}
+
+    return gestures_mapped, class_map
 
 def calculate_rms(window):
     """
@@ -86,10 +97,6 @@ def calculate_features(gestures, channels=None):
     features = []
     labels = []
 
-    class_map = {
-        v: i for i, v in enumerate(gestures.keys())
-    }
-
     for g in gestures.keys():
 
         for sample in gestures[g]:
@@ -104,7 +111,7 @@ def calculate_features(gestures, channels=None):
                 rms_per_channel = rms_per_channel / rms_avg
                 feature_set.extend(rms_per_channel)
             features.append(feature_set)
-            labels.append(class_map[g])
+            labels.append(g)
 
     features = np.array(features)
     labels = np.array(labels)
@@ -371,6 +378,7 @@ def train_model(electrodes_sorted, gestures, optimize_further, model_name):
     best_accuracy = 0
     best_f1 = 0
     best_model = None
+    best_cm = None
 
     if optimize_further:
         l_start = 2
@@ -414,8 +422,10 @@ def train_model(electrodes_sorted, gestures, optimize_further, model_name):
         best_channels = selected_channels
         best_accuracy = accuracy
         best_f1 = f1
+        y_pred = cross_val_predict(best_model, features, labels, cv=4)
+        best_cm = confusion_matrix(labels, y_pred)
         
-    return best_model, best_channels, best_accuracy, best_f1    
+    return best_model, best_channels, best_accuracy, best_f1, best_cm 
 
 def bandpass_filter(data, fs, lowcut=20, highcut=450, order=4):
     """
@@ -540,8 +550,8 @@ async def ws_train_model(websocket: WebSocket):
         channels = area_no_of_channels
     else:
         channels = []
-
-    gestures = get_data(ds_number, selected_gestures, channels, ds_filename)
+    
+    gestures, class_map = get_data(ds_number, selected_gestures, channels, ds_filename)
 
     if ds_number == 0 and apply_preprocess != "False":
         for sample in gestures[0]:
@@ -568,7 +578,7 @@ async def ws_train_model(websocket: WebSocket):
     if (no_of_channels != 0 and not optimize_further) or (no_of_channels != 0 and len(area_no_of_channels) == 0):
         electrodes_sorted = electrodes_sorted[-no_of_channels:]
 
-    best_model, best_channels, best_accuracy, best_f1 = train_model(electrodes_sorted, gestures, optimize_further, classifier)
+    best_model, best_channels, best_accuracy, best_f1, best_cm = train_model(electrodes_sorted, gestures, optimize_further, classifier)
 
     if len(channels):
         channel_map = {
@@ -576,6 +586,6 @@ async def ws_train_model(websocket: WebSocket):
         }
         best_channels = [channel_map[channel] for channel in best_channels]
 
-    await websocket.send_json({"best_channels": best_channels.tolist(), "accuracy": float(best_accuracy), "f1": float(best_f1)})
+    await websocket.send_json({"best_channels": best_channels.tolist(), "accuracy": float(best_accuracy), "f1": float(best_f1), "cm": best_cm.tolist()})
 
     await websocket.close()

@@ -1,0 +1,59 @@
+{
+  "dataset_name": "Nizamis et al.",
+  "author_name": "Nizamis K, Rijken NHM, van Middelaar R, Neto J, Koopman BFJM and Sartori M",
+  "link_to_dataset": "https://biolab.put.poznan.pl/putemg-dataset/",
+  "publication_venue": "Frontiers in Neurology",
+  "publication_venue_short": "Frontiers in Neurology",
+  "year": 2020,
+  "number_of_electrodes": 64,
+  "electrode_size": "5mm",
+  "electrode_spacing": "10mm",
+  "number_of_rows": 8,
+  "number_of_columns": 8,
+  "number_of_gestures": 7,
+  "electrode_placement_illustration": "./datasets/Nizamis et al/electrode_placement_v2.svg",
+  "gesture_classes": [
+    {
+      "class_name": " ",
+      "gestures": [
+        {
+          "gesture_name": "Hand Close",
+          "illustration": "./datasets/Nizamis et al/hand_close.png",
+          "id": 1
+        },
+        {
+          "gesture_name": "Wrist Flexion",
+          "illustration": "./datasets/Nizamis et al/wrist_flexsion.png",
+          "id": 6
+        },
+        {
+          "gesture_name": "Wrist Extension",
+          "illustration": "./datasets/Nizamis et al/wrist_extension.png",
+          "id": 7
+        },
+        {
+          "gesture_name": "Hand Open",
+          "illustration": "./datasets/Nizamis et al/hand_open.png",
+          "id": 2
+        },
+        {
+          "gesture_name": "Index Extension",
+          "illustration": "./datasets/Nizamis et al/index_extension.png",
+          "id": 3
+        },
+        {
+          "gesture_name": "Thumb Extension",
+          "illustration": "./datasets/Nizamis et al/thumb_extension.png",
+          "id": 4
+        },
+        {
+          "gesture_name": "Thumb Flexion",
+          "illustration": "./datasets/Nizamis et al/thumb_flexion.png",
+          "id": 5
+        }
+      ]
+    }
+  ]
+}
+
+

@@ -143,6 +143,7 @@
                   <option value="">Choose dataset...</option>
                   <option value="CSL-HDEMG">CSL-HDEMG</option>
                   <option value="PutEMG">PutEMG</option>
+                  <option value="Hyser">Hyser</option>
                 </select>
               </div>
 
@@ -319,22 +320,22 @@
   // Initialize canvas and electrode interaction
   let main_canvas = Snap("#drawing");
   let electrodeSet = [];
-  
+
   function renderDatasetElectrodes(data) {
     Snap.load(data.electrode_placement_illustration, function(fragment) {
       main_canvas.clear();
       main_canvas.add(fragment);
-      
+
       // Add interaction to electrode points
       main_canvas.selectAll("circle, rect, path").forEach(element => {
         const elementId = element.attr("id") || `electrode-${Math.random().toString(36).substr(2, 9)}`;
         element.attr({ id: elementId });
         element.addClass("electrode-point");
-        
+
         element.click(function() {
           const currentElectrode = electrodeSet.find(e => e.id === elementId);
           currentElectrode.selected = !currentElectrode.selected;
-          
+
           if (currentElectrode.selected) {
             element.attr({ fill: "#4CAF50", stroke: "#2E7D32" });
             element.addClass("selected");
@@ -343,10 +344,10 @@
             element.removeClass("selected");
           }
         });
-        
+
         electrodeSet.push({ id: elementId, selected: false });
       });
-      
+
       // Add grid lines
       Renderer.RenderGridWithLines(main_canvas);
     });
@@ -386,6 +387,9 @@
             loadDataset("./datasets/CSL-HDEMG/dataset_metadata.json");
           } else if (selectedDataset === "PutEMG") {
             loadDataset("./datasets/putEMG/dataset_metadata_putemg.json");
+          }
+          else if (selectedDataset === "Hyser") {
+              loadDataset("./datasets/Hyser/dataset_metadata_hyser.json");
           } else if (selectedDataset === "") {
             resetDatasetDetails();
             resetConfusionMatrix();
@@ -452,7 +456,7 @@
                   return `
                 <div class="col-4 col-md-3">
                   <div class="gesture-img-wrapper text-center">
-                    <img src="${gesture.illustration}" 
+                    <img src="${gesture.illustration}"
                          class="gesture-img img-fluid rounded"
                          data-gesture="${gesture.gesture_name}"
                          title="${gesture.gesture_name}">
@@ -492,11 +496,13 @@
           main_canvas.selectAll("*[id]").forEach((element) => {
             const elementId = element.attr("id");
             element.addClass("electrode-point");
+            console.log(element.attr("d"));
 
             element.click(function () {
               const currentElectrode = electrodeSet.find(
                 (e) => e.id === elementId
               );
+              console.log(elementId);
               if (!currentElectrode) {
                 electrodeSet.push({ id: elementId, selected: true });
                 element.addClass("selected");
@@ -578,7 +584,7 @@
           window.ws.send(JSON.stringify(dataToSend));
         }
       }
-      
+
       function getHeatmapColor(val, maxVal) {
         const t = val / maxVal;
         const r = Math.round(8 + (255 - 8) * (1 - t));
@@ -595,7 +601,7 @@
 
       function renderConfusionMatrix(accuracy, matrix, labels) {
         const maxVal = Math.max(...matrix.flat());
-        
+
         const cm_card = document.getElementById("confusion-matrix-card");
         cm_card.classList.add("card");
 
@@ -666,6 +672,71 @@
           }
         });
       }
+    </script>
+
+<!--    <script>-->
+<!--      document.addEventListener("DOMContentLoaded", function() {-->
+<!--        //var s = Snap("#svg");-->
+
+<!--        //var mat = main_canvas.rect(0, 0, 300, 300).attr("fill", "#ffffff");-->
+
+<!--        // var circle = main_canvas.circle(75, 75, 50);-->
+<!--        // var rect = main_canvas.rect(150, 150, 50, 50);-->
+<!--        var set = main_canvas.selectAll("*[id]");-->
+<!--        // var set = main_canvas.g(circle, rect).attr({-->
+<!--        //   fill: 'red',-->
+<!--        //   stroke: 0-->
+<!--        // });-->
+<!--        //-->
+<!--        var box;-->
+<!--        var selections = main_canvas.group();-->
+
+<!--        function dragstart(event) {-->
+<!--          var x = event.clientX;-->
+<!--          var y = event.clientY;-->
+<!--          box = main_canvas.rect(x, y, 0, 0).attr({-->
+<!--            stroke: "#9999FF",-->
+<!--            fill: "none"-->
+<!--          });-->
+<!--        }-->
+
+<!--        function dragmove(event) {-->
+<!--          var dx = event.clientX - box.attr("x");-->
+<!--          var dy = event.clientY - box.attr("y");-->
+<!--          var xoffset = dx < 0 ? dx : 0;-->
+<!--          var yoffset = dy < 0 ? dy : 0;-->
+<!--          box.transform("T" + xoffset + "," + yoffset);-->
+<!--          box.attr({-->
+<!--            width: Math.abs(dx),-->
+<!--            height: Math.abs(dy)-->
+<!--          });-->
+<!--        }-->
+
+<!--        function dragend(event) {-->
+<!--          var bounds = box.getBBox();-->
+<!--          box.remove();-->
+<!--          reset();-->
+
+<!--          set.selectAll("*").forEach(function(el) {-->
+<!--            if (Snap.path.isBBoxIntersect(el.getBBox(), bounds)) {-->
+<!--              selections.append(el);-->
+<!--            }-->
+<!--          });-->
+
+<!--          selections.attr("opacity", 0.5);-->
+<!--        }-->
+
+<!--        function reset() {-->
+<!--          selections.selectAll("*").forEach(function(el) {-->
+<!--            set.append(el);-->
+<!--          });-->
+<!--        }-->
+
+<!--        main_canvas.node.addEventListener("mousedown", dragstart);-->
+<!--        main_canvas.node.addEventListener("mousemove", dragmove);-->
+<!--        main_canvas.node.addEventListener("mouseup", dragend);-->
+<!--      });-->
+
     </script>
 
     <!-- Rest of the original JavaScript remains unchanged -->

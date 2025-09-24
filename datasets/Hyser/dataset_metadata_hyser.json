@@ -1,0 +1,192 @@
+{
+  "dataset_name": "Hyser",
+  "author_name": "Xinyu Jiang, Xiangyu Liu, Jiahao Fan, Xinming Ye, Chenyun Dai, Edward A. Clancy",
+  "link_to_dataset": "https://biolab.put.poznan.pl/putemg-dataset/",
+  "publication_venue": "IEEE Transactions on Neural Systems and Rehabilitation Engineering.",
+  "publication_venue_short": "IEEE TNSR",
+  "year": 2021,
+  "number_of_electrodes": 256,
+  "electrode_size": "5mm",
+  "electrode_spacing": "10mm",
+  "number_of_rows": 4,
+  "number_of_columns": 64,
+  "number_of_gestures": 34,
+  "electrode_placement_illustration": "./datasets/Hyser/electrode_placement_v1_with_ids_ordered.svg",
+  "gesture_classes": [
+    {
+      "class_name": " ",
+      "gestures": [
+        {
+          "gesture_name": "Thumb extension",
+          "illustration": "./datasets/Hyser/thumb-finger-extension.jpg",
+          "id": 1
+        },
+        {
+          "gesture_name": "Index extension",
+          "illustration": "./datasets/Hyser/index-finger-extension.jpg",
+          "id": 2
+        },
+        {
+          "gesture_name": "Middle extension",
+          "illustration": "./datasets/Hyser/middle-finger-extension.jpg",
+          "id": 3
+        },
+        {
+          "gesture_name": "Ring extension",
+          "illustration": "./datasets/Hyser/ring-finger-extension.jpg",
+          "id": 4
+        },
+        {
+          "gesture_name": "Little extension",
+          "illustration": "./datasets/Hyser/little-finger-extension.jpg",
+          "id": 5
+        },
+        {
+          "gesture_name": "Wrist flexion",
+          "illustration": "./datasets/Hyser/wrist-flexion.jpg",
+          "id": 6
+        },
+        {
+          "gesture_name": "Wrist Extension",
+          "illustration": "./datasets/Hyser/wrist-extension.jpg",
+          "id": 7
+        },
+        {
+          "gesture_name": "Wrist Radial",
+          "illustration": "./datasets/Hyser/wrist-radial.jpg",
+          "id": 8
+        },
+		{
+          "gesture_name": "Wrist Ulnar",
+          "illustration": "./datasets/Hyser/wrist-ulnar.jpg",
+          "id": 9
+        },
+		{
+          "gesture_name": "Wrist Pronation",
+          "illustration": "./datasets/Hyser/wrist-pronation.jpg",
+          "id": 10
+        },
+		{
+          "gesture_name": "Wrist Supinaton",
+          "illustration": "./datasets/Hyser/wrist-supination.jpg",
+          "id": 11
+        },
+		{
+          "gesture_name": "Extension- Thumb-Index",
+          "illustration": "./datasets/Hyser/extension-TI.jpg",
+          "id": 12
+        },
+		{
+          "gesture_name": "Extension-Index-Middle",
+          "illustration": "./datasets/Hyser/extension-IM.jpg",
+          "id": 13
+        },
+		{
+          "gesture_name": "Wrist Flexion (HC)",
+          "illustration": "./datasets/Hyser/hand-close-wf.jpg",
+          "id": 14
+        },
+		{
+          "gesture_name": "Wrist Extension (HC)",
+          "illustration": "./datasets/Hyser/hand-close-we.jpg",
+          "id": 15
+        },
+		{
+          "gesture_name": "Wrist Radial (HC)",
+          "illustration": "./datasets/Hyser/wrist-radial(HC).jpg",
+          "id": 16
+        },
+		{
+          "gesture_name": "Wrist Ulnar (HC)",
+          "illustration": "./datasets/Hyser/wrist-ulnar(HC).jpg",
+          "id": 17
+        },
+		{
+          "gesture_name": "Wrist Pronation (HC)",
+          "illustration": "./datasets/Hyser/wrist-pronation(HC).jpg",
+          "id": 18
+        },
+		{
+          "gesture_name": "Wrist Supination (HC)",
+          "illustration": "./datasets/Hyser/wrist-supination(HC).jpg",
+          "id": 19
+        },
+		{
+          "gesture_name": "Wrist Flexion (HC)",
+          "illustration": "./datasets/Hyser/wrist-flexion(HC).jpg",
+          "id": 20
+        },
+		{
+          "gesture_name": "Wrist Extension (HC)",
+          "illustration": "./datasets/Hyser/wrist-extension(HC).jpg",
+          "id": 21
+        },
+		{
+          "gesture_name": "Wrist Radial (HO)",
+          "illustration": "./datasets/Hyser/wrist-radial(HO).jpg",
+          "id": 22
+        },
+		{
+          "gesture_name": "Wrist Ulnar(HO)",
+          "illustration": "./datasets/Hyser/wrist-ulnar(HO).jpg",
+          "id": 23
+        },
+		{
+          "gesture_name": "Wrist Pronation (HO)",
+          "illustration": "./datasets/Hyser/wrist-pronation(HO).jpg",
+          "id": 24
+        },
+		{
+          "gesture_name": "Wrist Supination (HO)",
+          "illustration": "./datasets/Hyser/wrist-supination(HO).jpg",
+          "id": 25
+        },
+		{
+          "gesture_name": "Extension (TIM)",
+          "illustration": "./datasets/Hyser/extension-TIM.jpg",
+          "id": 25
+        },
+		{
+          "gesture_name": "Extension (IMR)",
+          "illustration": "./datasets/Hyser/extension-IMR.jpg",
+          "id": 27
+        },
+		{
+          "gesture_name": "Extension (MRL)",
+          "illustration": "./datasets/Hyser/extension-MRL.jpg",
+          "id": 28
+        },
+		{
+          "gesture_name": "Extension (IMR)",
+          "illustration": "./datasets/Hyser/extension-IMRL.jpg",
+          "id": 29
+        },
+		{
+          "gesture_name": "Hand Close",
+          "illustration": "./datasets/Hyser/hand-close.jpg",
+          "id": 30
+        },
+		{
+          "gesture_name": "Hand Open",
+          "illustration": "./datasets/Hyser/hand-open.jpg",
+          "id": 31
+        },
+		{
+          "gesture_name": "Pinch -TI",
+          "illustration": "./datasets/Hyser/pinch-TI.jpg",
+          "id": 32
+        },
+		{
+          "gesture_name": "Pinch -TIM",
+          "illustration": "./datasets/Hyser/pinch-TIM.jpg",
+          "id": 33
+        },
+		{
+          "gesture_name": "Pinch -TM",
+          "illustration": "./datasets/Hyser/pinch-TM.jpg",
+          "id": 34
+        }
+      ]
+    }
+  ]
+}

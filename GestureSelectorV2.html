@@ -539,6 +539,7 @@
                 (e) => e.id === elementId
               );
               if (!currentElectrode) {
+                console.log(elementId);
                 electrodeSet.push({ id: elementId, selected: true });
                 element.addClass("selected");
                 element.attr({ fill: "#4CAF50", stroke: "#2E7D32" });

@@ -2,14 +2,21 @@ import os
 import shutil
 import pickle
 import numpy as np
-from scipy.signal import medfilt
+from typing import List
+
+# FastAPI and WebSocket imports
+from pydantic import BaseModel
 from fastapi import FastAPI, WebSocket
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from scipy.signal import butter, filtfilt, iirnotch
-from sklearn.model_selection import StratifiedKFold, cross_val_predict
-from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
 
+# signal processing
+from scipy.signal import medfilt
+from scipy.signal import butter, filtfilt, iirnotch
+
+# stencil generation
+import xml.etree.ElementTree as ET
+from reportlab.lib.pagesizes import letter
 
 # classifiers
 import xgboost as xgb
@@ -18,6 +25,8 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import StratifiedKFold, cross_val_predict
+from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
 
 # metrics
 import shap
@@ -503,6 +512,145 @@ def preprocess(sample, fs):
     sample_ = bandpass_filter(sample_, fs)
     return sample_
 
+class StencilRequest(BaseModel):
+    ds: str
+    circumference_values: List[float]
+    selected_electrodes: List[int]
+
+def find_coordinates_stacked(matrix, numbers):
+    coords = set()
+    num_rows = len(matrix)
+    
+    for row_index, row in enumerate(matrix):
+        x = num_rows - 1 - row_index  # Flip row index to match your desired x
+        for y, value in enumerate(row):
+            if value in numbers:
+                coords.add((x, y))
+                
+    return coords
+
+@app.post("/generate_stencil")
+def generate_stencil(request: StencilRequest):
+    ds_mapping = {"CSL-HDEMG": 1, "DELTA": 2, "GrabMyo": 3, "PutEMG": 4, "Hyser": 5, "Nizamis et al.": 6}
+
+    ds_number = ds_mapping[request.ds]
+
+    # Settings
+    output_filename = "static/ellipse_grid_variable_spacing.svg"
+    page_width, page_height = (750, 550)  # Letter size: 8.5 x 11 inches (215.9 x 279.4 mm)
+
+    # Grid settings (values in cm for each row)
+    row_spacings_cm = np.array(request.circumference_values)
+    row_spacings_cm /= 8
+
+    ellipse_width_mm = 5  # Ellipse width in mm
+    ellipse_height_mm = 5  # Ellipse height in mm
+    vertical_spacing_cm = 2.0  # Uniform vertical spacing in cm
+    circle_diameter_mm = 20  # Circle diameter in mm
+
+    # Convert mm and cm to points
+    mm_to_points = 72 / 25.4
+    cm_to_points = 72 / 2.54
+
+    ellipse_width = ellipse_width_mm * mm_to_points
+    ellipse_height = ellipse_height_mm * mm_to_points
+    vertical_spacing = vertical_spacing_cm * cm_to_points
+    circle_diameter = circle_diameter_mm * mm_to_points
+    circle_radius = circle_diameter / 2
+
+    # Calculate grid dimensions and margins
+    num_cols = 8
+    row_widths = row_spacings_cm * (num_cols - 1) * cm_to_points
+    max_row_width = np.max(row_widths)
+    grid_height = (len(row_spacings_cm) - 1) * vertical_spacing
+    grid_width = max_row_width
+
+    x_margin_global = (page_width - grid_width) / 2
+    y_margin = (page_height - grid_height) / 2
+
+    # Positions where ellipses are replaced with circles
+    matrix = [
+        [17, 18, 19, 20, 21, 22, 23, 24],
+        [9, 10, 11, 12, 13, 14, 15, 16],
+        [1, 2, 3, 4, 5, 6, 7, 8]
+    ]
+    
+    replacement_positions = find_coordinates_stacked(matrix, request.selected_electrodes)
+
+    # Create SVG root
+    svg = ET.Element('svg', xmlns="http://www.w3.org/2000/svg", width=str(page_width), height=str(page_height), version="1.1")
+
+    def create_grid_with_variable_spacing():
+        y_position = page_height - y_margin  # Start from the top of the grid
+        circle_elements = []  # Hold circle elements to draw them later
+
+        for row, horizontal_spacing_cm in enumerate(row_spacings_cm):
+            horizontal_spacing = horizontal_spacing_cm * cm_to_points
+            row_width = (num_cols - 1) * horizontal_spacing
+            x_margin = x_margin_global + (max_row_width - row_width) / 2
+            row_x_min = x_margin
+            row_x_max = x_margin + row_width
+            row_y_min = y_position - ellipse_height / 2
+
+            # Draw rectangle around the row
+            ET.SubElement(svg, 'rect',
+                        x=str(round(row_x_min - (ellipse_width / 2) - 30, 2)),
+                        y=str(round(row_y_min, 2)),
+                        width=str(round(row_x_max - row_x_min + ellipse_width + 60, 2)),
+                        height=str(2 * cm_to_points),
+                        stroke="black", stroke_width="0.001", fill="white")
+
+            for col in range(num_cols):
+                x = x_margin + col * horizontal_spacing
+
+                if (row, col) in replacement_positions:
+                    # Store circles to render after ellipses
+                    left_circle = ET.Element('circle',
+                                            cx=str(round(x, 2)),
+                                            cy=str(round(y_position, 2)),
+                                            r=str(round(circle_radius / 2, 2)),
+                                            stroke="black", stroke_width="0.001", fill="white")
+
+                    right_circle = ET.Element('circle',
+                                            cx=str(round(x, 2)),
+                                            cy=str(round(y_position - circle_radius, 2)),
+                                            r=str(round(circle_radius / 2, 2)),
+                                            stroke="black", stroke_width="0.001", fill="white")
+
+                    circle_elements.extend([left_circle, right_circle])
+
+                # Draw ellipse (beneath the circles)
+                ET.SubElement(svg, 'ellipse',
+                            cx=str(round(x, 2)),
+                            cy=str(round(y_position, 2)),
+                            rx=str(round(ellipse_width / 2, 2)),
+                            ry=str(round(ellipse_height / 2, 2)),
+                            stroke="black", stroke_width="0.001", fill="white")
+
+            y_position -= vertical_spacing
+
+        # Add all circles last to bring them on top
+        for circle in circle_elements:
+            svg.append(circle)
+
+    create_grid_with_variable_spacing()
+
+    # Remove namespace for compatibility
+    def remove_namespace(tag):
+        if '}' in tag:
+            return tag.split('}', 1)[1]
+        return tag
+
+    for elem in svg.iter():
+        elem.tag = remove_namespace(elem.tag)
+
+    # Write SVG file
+    svg_tree = ET.ElementTree(svg)
+    svg_tree.write(output_filename, encoding='utf-8', xml_declaration=True)
+
+    print(f"✅ SVG with centered grid and top-layer circles generated: {output_filename}")
+
+
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
     file_location = f"{UPLOAD_DIR}/{file.filename}"
@@ -546,7 +694,7 @@ async def ws_train_model(websocket: WebSocket):
         await websocket.close()
 
     if len(area_no_of_channels):
-        channels = [int(channel) for channel in area_no_of_channels]
+        channels = [int(channel) - 1 for channel in area_no_of_channels]
     else:
         channels = []
     
@@ -586,6 +734,8 @@ async def ws_train_model(websocket: WebSocket):
             i: v for i, v in enumerate(channels) 
         }
         best_channels = np.array([channel_map[channel] for channel in best_channels])
+    
+    # best_channels += 1
 
     await websocket.send_json({"best_channels": best_channels.tolist(), "accuracy": round(float(best_accuracy) * 100, 2), "f1": float(best_f1), "cm": best_cm.tolist()})
 

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EMG Dataset Viewer</title>
+    <title>SparseEMG</title>
 
     <!-- Bootstrap 5 -->
     <link
@@ -21,13 +21,15 @@
       rel="stylesheet"
     />
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <!-- Custom Styles -->
     <style>
       .main-card {
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         border-radius: 15px;
         transition: transform 0.2s;
-        min-height: 800px;
+        min-height: 865px;
       }
 
       .main-card:hover {
@@ -61,7 +63,7 @@
         background: linear-gradient(135deg, #0d6efd, #0b5ed7);
         color: white;
         border: none;
-        padding: 0.8rem 1.5rem;
+        padding: 0.5rem;
         border-radius: 8px;
         transition: all 0.3s ease;
       }
@@ -143,7 +145,10 @@
                   <option value="">Choose dataset...</option>
                   <option value="CSL-HDEMG">CSL-HDEMG</option>
                   <option value="PutEMG">PutEMG</option>
-                  <option value="Hyser">Hyser</option>
+                  <option value="Nizamis et al.">Nizamis et al.</option>
+                  <option value="Nizamis et al.">DELTA</option>
+                  <option value="Nizamis et al.">GrabMyo</option>
+                  <option value="Nizamis et al.">Hyser</option>
                 </select>
               </div>
 
@@ -158,9 +163,6 @@
                   </div>
                   <div class="list-group-item">
                     Electrodes: <span id="dataset_electrodes">-</span>
-                  </div>
-                  <div class="list-group-item">
-                    Gestures: <span id="dataset_gesture_classes">-</span>
                   </div>
                   <div class="list-group-item">
                     Number of Gestures:
@@ -190,19 +192,25 @@
                     <option value="permutation_importance">
                       Permutation Importance
                     </option>
-                    <option value="rms">RMS</option>
                     <option value="mutual_importance">Mutual Importance</option>
+                    <option value="rms">RMS-Based Importance</option>
+                    <option value="SHAP">
+                      SHAP
+                    </option>
                   </select>
                 </div>
 
                 <div class="mb-3">
                   <label class="form-label">Classifier</label>
                   <select class="form-select" id="classifierSelect">
+                    <option value="random_forest">Random Forest</option>
                     <option value="logistic_regression">
                       Logistic Regression
                     </option>
-                    <option value="random_forest">Random Forest</option>
-                    <option value="SVC">Support Vector Machine</option>
+                    <option value="support_vector_classifier">Support Vector Classifier</option>
+                    <option value="xgboost">XGBoost</option>
+                    <option value="k_nearest_neighbors">K-Nearest Neigbors</option>
+                    <option value="naive_bayes">Naive Bayes</option>
                   </select>
                 </div>
 
@@ -257,6 +265,9 @@
           <div class="card main-card">
             <div class="card-body">
               <h5 class="control-header mb-3">Visualization Canvas</h5>
+              <div id="electrode-tooltip" class="d-none">
+                <div>Click electrodes to select</div>
+              </div>
               <div class="canvas-container position-relative">
                 <svg
                   id="drawing"
@@ -266,9 +277,6 @@
                 >
                   <!-- Grid will be rendered here -->
                 </svg>
-                <div class="position-absolute top-0 end-0 mt-2 me-3">
-                  <div class="badge bg-primary">Click electrodes to select</div>
-                </div>
               </div>
             </div>
           </div>
@@ -277,7 +285,7 @@
         <!-- Right Gesture Selection -->
         <div class="col-lg-3 px-0">
           <div class="card main-card">
-            <div class="card-body">
+            <div class="card-body pb-0">
               <h5 class="control-header mb-3">
                 <span class="inline-icon material-icons-outlined"
                   >waving_hand</span
@@ -287,7 +295,7 @@
               <div
                 id="gesture-container"
                 class="row row-cols-1 g-2"
-                style="height: 300px; overflow-y: auto"
+                style="height: 330px; overflow-y: auto"
               ></div>
             </div>
             <div id="confusion-matrix-card">
@@ -299,71 +307,59 @@
             </div>
             <div class="card-footer d-flex justify-content-between gap-2">
               <button
-                class="generate-btn flex-fill"
+                class="btn generate-btn flex-fill"
                 onclick="getUserSelectedData()"
               >
                 Generate layout
               </button>
-              <button
-                class="generate-btn flex-fill"
-                onclick="getUserSelectedData()"
-              >
+              <button class="btn generate-btn flex-fill" data-bs-toggle="modal" data-bs-target="#imageModal">
                 Generate stencil
               </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- <script>
-  // Initialize canvas and electrode interaction
-  let main_canvas = Snap("#drawing");
-  let electrodeSet = [];
-
-  function renderDatasetElectrodes(data) {
-    Snap.load(data.electrode_placement_illustration, function(fragment) {
-      main_canvas.clear();
-      main_canvas.add(fragment);
-
-      // Add interaction to electrode points
-      main_canvas.selectAll("circle, rect, path").forEach(element => {
-        const elementId = element.attr("id") || `electrode-${Math.random().toString(36).substr(2, 9)}`;
-        element.attr({ id: elementId });
-        element.addClass("electrode-point");
-
-        element.click(function() {
-          const currentElectrode = electrodeSet.find(e => e.id === elementId);
-          currentElectrode.selected = !currentElectrode.selected;
-
-          if (currentElectrode.selected) {
-            element.attr({ fill: "#4CAF50", stroke: "#2E7D32" });
-            element.addClass("selected");
-          } else {
-            element.attr({ fill: "#000", stroke: "#000" });
-            element.removeClass("selected");
-          }
-        });
-
-        electrodeSet.push({ id: elementId, selected: false });
-      });
-
-      // Add grid lines
-      Renderer.RenderGridWithLines(main_canvas);
-    });
-  }
-
-  // Update loadDataset function
-  function loadDataset(jsonFile) {
-    fetch(jsonFile)
-      .then(response => response.json())
-      .then(data => {
-        renderDatasetDetails(data);
-        renderGestureImages(data);
-        renderDatasetElectrodes(data); // Add this line back
-      });
-  }
-</script> -->
+      <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content">
+            <div class="modal-body text-center">
+      
+              <!-- Page 1: Circumference Inputs -->
+              <div id="page1">
+                <h5>Enter Circumference Values</h5>
+                <p id="instructionText" style="text-align: left;">
+                  Enter 8 comma separate circumference values starting from 20% of your forearm length from the elbow.
+                </p>
+                <div class="row">
+                  <div class="col mb-2"><input class="form-control" placeholder="Circumference Values" /></div>
+                </div>
+                <button class="btn generate-btn mt-3" onclick="goToPage2()">Next</button>
+              </div>
+      
+              <!-- Loader -->
+              <div id="loader" style="display: none;">
+                <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              </div>
+      
+              <!-- Page 2: Image and Download -->
+              <div id="page2" style="display: none;">
+                <div id="mainImageContainer" class="text-center"></div>
+                <div class="mb-3">
+                  <a href="./server/static/ellipse_grid_variable_spacing.svg" download class="btn generate-btn flex-fill">
+                    Download Stencil Image
+                  </a>
+                  <button class="btn generate-btn" onclick="goBackToPage1()">Back</button>
+                </div>
+              </div>
+      
+            </div>
+          </div>
+        </div>
+      </div>
 
     <script>
       var MAIN_CANVAS_SVG_WIDTH = 400;
@@ -379,6 +375,42 @@
       let electrodeSet = [];
       let dataset_gestures = [];
 
+      function goToPage2() {
+        document.getElementById('page1').style.display = 'none';
+        document.getElementById('loader').style.display = 'block';
+
+        var payload = {
+          ds: document.getElementById('datasetSelect').value,
+          circumference_values: document.querySelector('input.form-control').value.split(',').map(Number),
+          selected_electrodes: electrodeSet.filter(e => e.selected).map(e => e.id),
+        };
+
+        axios.post('http://127.0.0.1:8000/generate_stencil', payload).then(response => {
+          mainImageContainer = document.getElementById('mainImageContainer');
+          mainImageContainer.innerHTML = ''; // Clear previous content
+          mainImageContainer.innerHTML = 
+            `<img src="./server/static/ellipse_grid_variable_spacing.svg" alt="Large Preview" class="img-fluid mb-4" />`
+        }).catch(error => {
+          console.error(error);
+        });
+
+        setTimeout(() => {
+          document.getElementById('loader').style.display = 'none';
+          document.getElementById('page2').style.display = 'block';
+        }, 500);
+      }
+
+      function goBackToPage1() {
+        document.getElementById('page2').style.display = 'none';
+        // document.getElementById('loader').style.display = 'block';
+        document.getElementById('page1').style.display = 'block';
+
+        setTimeout(() => {
+          // document.getElementById('loader').style.display = 'none';
+          document.getElementById('page1').style.display = 'block';
+        }, 500);
+      }
+
       document
         .getElementById("datasetSelect")
         .addEventListener("change", function () {
@@ -387,10 +419,10 @@
             loadDataset("./datasets/CSL-HDEMG/dataset_metadata.json");
           } else if (selectedDataset === "PutEMG") {
             loadDataset("./datasets/putEMG/dataset_metadata_putemg.json");
+          }  else if (selectedDataset === "Nizamis et al.") {
+            loadDataset("./datasets/Nizamis et al/dataset_metadata_nizamis.json");
           }
-          else if (selectedDataset === "Hyser") {
-              loadDataset("./datasets/Hyser/dataset_metadata_hyser.json");
-          } else if (selectedDataset === "") {
+          else if (selectedDataset === "") {
             resetDatasetDetails();
             resetConfusionMatrix();
           }
@@ -399,16 +431,15 @@
       function renderDatasetDetails(data) {
         dataset_name.innerHTML = data.dataset_name;
         dataset_electrodes.innerHTML = data.number_of_electrodes;
-        dataset_gesture_classes.innerHTML = data.gesture_classes.length;
         dataset_gestures_info.innerHTML = data.number_of_gestures;
         dataset_year.innerHTML = data.year;
         dataset_publication.innerHTML = data.publication_venue_short;
+        instructionText.innerText = `Enter ${data.number_of_rows} comma separate circumference values starting from 20% of your forearm length from the elbow.`;
       }
 
       function resetDatasetDetails() {
         dataset_name.innerHTML = "-";
         dataset_electrodes.innerHTML = "-";
-        dataset_gesture_classes.innerHTML = "-";
         dataset_gestures_info.innerHTML = "-";
         dataset_year.innerHTML = "-";
         dataset_publication.innerHTML = "-";
@@ -431,6 +462,9 @@
             renderDatasetDetails(data);
             renderGestureImages(data);
             renderDatasetElectrodes(data);
+
+            const electrode_tooltip = document.getElementById("electrode-tooltip");
+            electrode_tooltip.classList.remove("d-none");
 
             const slider = document.getElementById("electrode_channel_slider");
             slider.max = data.number_of_electrodes;
@@ -457,6 +491,7 @@
                 <div class="col-4 col-md-3">
                   <div class="gesture-img-wrapper text-center">
                     <img src="${gesture.illustration}"
+                         style="max-height: 80px; min-height: 80px; object-fit: cover;" 
                          class="gesture-img img-fluid rounded"
                          data-gesture="${gesture.gesture_name}"
                          title="${gesture.gesture_name}">
@@ -494,15 +529,13 @@
           main_canvas.append(fragment);
 
           main_canvas.selectAll("*[id]").forEach((element) => {
-            const elementId = element.attr("id");
+            const elementId = Number(element.attr("id").split("_")[1]);
             element.addClass("electrode-point");
-            console.log(element.attr("d"));
 
             element.click(function () {
               const currentElectrode = electrodeSet.find(
                 (e) => e.id === elementId
               );
-              console.log(elementId);
               if (!currentElectrode) {
                 electrodeSet.push({ id: elementId, selected: true });
                 element.addClass("selected");
@@ -532,7 +565,7 @@
 
         electrodeSet.forEach((e) => {
           if (e.selected) {
-            selectedElectrodes.push(e.id.split("_")[1]);
+            selectedElectrodes.push(e.id);
           }
         });
 
@@ -584,7 +617,7 @@
           window.ws.send(JSON.stringify(dataToSend));
         }
       }
-
+      
       function getHeatmapColor(val, maxVal) {
         const t = val / maxVal;
         const r = Math.round(8 + (255 - 8) * (1 - t));
@@ -601,14 +634,14 @@
 
       function renderConfusionMatrix(accuracy, matrix, labels) {
         const maxVal = Math.max(...matrix.flat());
-
+        
         const cm_card = document.getElementById("confusion-matrix-card");
         cm_card.classList.add("card");
 
         const predicted_accuracy = document.getElementById(
           "predicted_accuracy"
         );
-        predicted_accuracy.innerText = `Predicted Accuracy: ${accuracy}%`;
+        predicted_accuracy.innerText = `Expected Accuracy: ${accuracy}%`;
 
         const table = document.getElementById("confusion-matrix");
 
@@ -617,6 +650,10 @@
         const cornerTh = document.createElement("th");
         cornerTh.innerText = "Actual";
         headerRow.appendChild(cornerTh);
+        
+        if (!labels.includes("Idle")) {
+          labels.unshift("Idle")
+        }
 
         labels.forEach((label) => {
           const th = document.createElement("th");
@@ -663,82 +700,24 @@
       function selectActiveElectrodes(selectedElectrodes) {
         main_canvas.selectAll(".electrode-point").forEach((element) => {
           const elementId = Number(element.attr("id").split("_")[1]);
-          if (selectedElectrodes.includes(elementId)) {
+          const currentElectrode = electrodeSet.find(
+            (e) => e.id === elementId
+          );
+          if (selectedElectrodes.includes(elementId - 1)) {
             element.addClass("selected");
             element.attr({ fill: "#4CAF50", stroke: "#2E7D32" });
+            if (!currentElectrode) {
+              electrodeSet.push({ id: elementId, selected: true });
+            } else {
+              currentElectrode.selected = true;
+            }
           } else {
             element.removeClass("selected");
             element.attr({ fill: "#000", stroke: "#000" });
+            currentElectrode && (currentElectrode.selected = false)
           }
         });
       }
     </script>
-
-<!--    <script>-->
-<!--      document.addEventListener("DOMContentLoaded", function() {-->
-<!--        //var s = Snap("#svg");-->
-
-<!--        //var mat = main_canvas.rect(0, 0, 300, 300).attr("fill", "#ffffff");-->
-
-<!--        // var circle = main_canvas.circle(75, 75, 50);-->
-<!--        // var rect = main_canvas.rect(150, 150, 50, 50);-->
-<!--        var set = main_canvas.selectAll("*[id]");-->
-<!--        // var set = main_canvas.g(circle, rect).attr({-->
-<!--        //   fill: 'red',-->
-<!--        //   stroke: 0-->
-<!--        // });-->
-<!--        //-->
-<!--        var box;-->
-<!--        var selections = main_canvas.group();-->
-
-<!--        function dragstart(event) {-->
-<!--          var x = event.clientX;-->
-<!--          var y = event.clientY;-->
-<!--          box = main_canvas.rect(x, y, 0, 0).attr({-->
-<!--            stroke: "#9999FF",-->
-<!--            fill: "none"-->
-<!--          });-->
-<!--        }-->
-
-<!--        function dragmove(event) {-->
-<!--          var dx = event.clientX - box.attr("x");-->
-<!--          var dy = event.clientY - box.attr("y");-->
-<!--          var xoffset = dx < 0 ? dx : 0;-->
-<!--          var yoffset = dy < 0 ? dy : 0;-->
-<!--          box.transform("T" + xoffset + "," + yoffset);-->
-<!--          box.attr({-->
-<!--            width: Math.abs(dx),-->
-<!--            height: Math.abs(dy)-->
-<!--          });-->
-<!--        }-->
-
-<!--        function dragend(event) {-->
-<!--          var bounds = box.getBBox();-->
-<!--          box.remove();-->
-<!--          reset();-->
-
-<!--          set.selectAll("*").forEach(function(el) {-->
-<!--            if (Snap.path.isBBoxIntersect(el.getBBox(), bounds)) {-->
-<!--              selections.append(el);-->
-<!--            }-->
-<!--          });-->
-
-<!--          selections.attr("opacity", 0.5);-->
-<!--        }-->
-
-<!--        function reset() {-->
-<!--          selections.selectAll("*").forEach(function(el) {-->
-<!--            set.append(el);-->
-<!--          });-->
-<!--        }-->
-
-<!--        main_canvas.node.addEventListener("mousedown", dragstart);-->
-<!--        main_canvas.node.addEventListener("mousemove", dragmove);-->
-<!--        main_canvas.node.addEventListener("mouseup", dragend);-->
-<!--      });-->
-
-    </script>
-
-    <!-- Rest of the original JavaScript remains unchanged -->
   </body>
 </html>

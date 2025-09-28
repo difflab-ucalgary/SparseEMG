@@ -148,7 +148,7 @@
                   <option value="Nizamis et al.">Nizamis et al.</option>
                   <option value="Nizamis et al.">DELTA</option>
                   <option value="Nizamis et al.">GrabMyo</option>
-                  <option value="Nizamis et al.">Hyser</option>
+                  <option value="Hyser">Hyser</option>
                 </select>
               </div>
 
@@ -323,7 +323,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
           <div class="modal-content">
             <div class="modal-body text-center">
-      
+
               <!-- Page 1: Circumference Inputs -->
               <div id="page1">
                 <h5>Enter Circumference Values</h5>
@@ -335,7 +335,7 @@
                 </div>
                 <button class="btn generate-btn mt-3" onclick="goToPage2()">Next</button>
               </div>
-      
+
               <!-- Loader -->
               <div id="loader" style="display: none;">
                 <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
@@ -344,7 +344,7 @@
                   </div>
                 </div>
               </div>
-      
+
               <!-- Page 2: Image and Download -->
               <div id="page2" style="display: none;">
                 <div id="mainImageContainer" class="text-center"></div>
@@ -355,7 +355,7 @@
                   <button class="btn generate-btn" onclick="goBackToPage1()">Back</button>
                 </div>
               </div>
-      
+
             </div>
           </div>
         </div>
@@ -388,7 +388,7 @@
         axios.post('http://127.0.0.1:8000/generate_stencil', payload).then(response => {
           mainImageContainer = document.getElementById('mainImageContainer');
           mainImageContainer.innerHTML = ''; // Clear previous content
-          mainImageContainer.innerHTML = 
+          mainImageContainer.innerHTML =
             `<img src="./server/static/ellipse_grid_variable_spacing.svg" alt="Large Preview" class="img-fluid mb-4" />`
         }).catch(error => {
           console.error(error);
@@ -421,6 +421,8 @@
             loadDataset("./datasets/putEMG/dataset_metadata_putemg.json");
           }  else if (selectedDataset === "Nizamis et al.") {
             loadDataset("./datasets/Nizamis et al/dataset_metadata_nizamis.json");
+          } else if (selectedDataset === "Hyser") {
+            loadDataset("./datasets/Hyser/dataset_metadata_hyser.json");
           }
           else if (selectedDataset === "") {
             resetDatasetDetails();
@@ -491,7 +493,7 @@
                 <div class="col-4 col-md-3">
                   <div class="gesture-img-wrapper text-center">
                     <img src="${gesture.illustration}"
-                         style="max-height: 80px; min-height: 80px; object-fit: cover;" 
+                         style="max-height: 80px; min-height: 80px; object-fit: cover;"
                          class="gesture-img img-fluid rounded"
                          data-gesture="${gesture.gesture_name}"
                          title="${gesture.gesture_name}">
@@ -537,6 +539,7 @@
                 (e) => e.id === elementId
               );
               if (!currentElectrode) {
+                console.log(elementId);
                 electrodeSet.push({ id: elementId, selected: true });
                 element.addClass("selected");
                 element.attr({ fill: "#4CAF50", stroke: "#2E7D32" });
@@ -617,7 +620,7 @@
           window.ws.send(JSON.stringify(dataToSend));
         }
       }
-      
+
       function getHeatmapColor(val, maxVal) {
         const t = val / maxVal;
         const r = Math.round(8 + (255 - 8) * (1 - t));
@@ -634,7 +637,7 @@
 
       function renderConfusionMatrix(accuracy, matrix, labels) {
         const maxVal = Math.max(...matrix.flat());
-        
+
         const cm_card = document.getElementById("confusion-matrix-card");
         cm_card.classList.add("card");
 
@@ -650,7 +653,7 @@
         const cornerTh = document.createElement("th");
         cornerTh.innerText = "Actual";
         headerRow.appendChild(cornerTh);
-        
+
         if (!labels.includes("Idle")) {
           labels.unshift("Idle")
         }

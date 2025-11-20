@@ -146,8 +146,8 @@
                   <option value="CSL-HDEMG">CSL-HDEMG</option>
                   <option value="PutEMG">PutEMG</option>
                   <option value="Nizamis et al.">Nizamis et al.</option>
-                  <option value="Nizamis et al.">DELTA</option>
-                  <option value="Nizamis et al.">GrabMyo</option>
+                  <option value="DELTA">DELTA</option>
+                  <option value="GrabMyo">GrabMyo</option>
                   <option value="Hyser">Hyser</option>
                 </select>
               </div>
@@ -232,7 +232,7 @@
                 </div>
 
                 <div class="mb-3">
-                  <div class="form-check form-switch">
+                  <!-- <div class="form-check form-switch">
                     <input
                       class="form-check-input"
                       type="checkbox"
@@ -242,7 +242,7 @@
                     <label class="form-check-label" for="sketch_toggle"
                       >Enable Sketching</label
                     >
-                  </div>
+                  </div> -->
                   <div class="form-check form-switch">
                     <input
                       class="form-check-input"
@@ -423,11 +423,15 @@
             loadDataset("./datasets/Nizamis et al/dataset_metadata_nizamis.json");
           } else if (selectedDataset === "Hyser") {
             loadDataset("./datasets/Hyser/dataset_metadata_hyser.json");
+          } else if (selectedDataset === "DELTA") {
+            loadDataset("./datasets/DELTA/dataset_metadata_delta.json");
+          } else if (selectedDataset === "GrabMyo") {
+            loadDataset("./datasets/GrabMyo/dataset_metadata_grabmyo.json");
           }
           else if (selectedDataset === "") {
             resetDatasetDetails();
-            resetConfusionMatrix();
           }
+          resetConfusionMatrix();
         });
 
       function renderDatasetDetails(data) {

@@ -1,0 +1,102 @@
+{
+  "dataset_name": "GrabMyo",
+  "author_name": "Jiang, N., Pradhan, A., and He, J.",
+  "link_to_dataset": "https://physionet.org/content/grabmyo/1.1.0/",
+  "publication_venue": "Scientific Data",
+  "publication_venue_short": "Scientific Data",
+  "year": 2022,
+  "number_of_electrodes": 28,
+  "electrode_size": "5mm",
+  "electrode_spacing": "10mm",
+  "number_of_rows": 4,
+  "number_of_columns": 3,
+  "number_of_gestures": 17,
+  "electrode_placement_illustration": "./datasets/GrabMyo/electrode_placement.svg",
+  "gesture_classes": [
+    {
+      "class_name": " ",
+      "gestures": [
+        {
+          "gesture_name": "Lateral prehension",
+          "illustration": "./datasets/GrabMyo/lateral_prehension.jpg",
+          "id": 1
+        },
+        {
+          "gesture_name": "Thumb adduction",
+          "illustration": "./datasets/GrabMyo/thumb_adduction.jpg",
+          "id": 2
+        },
+        {
+          "gesture_name": "Thumb and little finger opposition",
+          "illustration": "./datasets/GrabMyo/thumb_little_finger_opposition.jpg",
+          "id": 3
+        },
+        {
+          "gesture_name": "Thumb and index finger opposition",
+          "illustration": "./datasets/GrabMyo/thumb_index_finger_opposition.jpg",
+          "id": 4
+        },
+        {
+          "gesture_name": "Thumb and little finger extension",
+          "illustration": "./datasets/GrabMyo/thumb_little_finger_extension.jpg",
+          "id": 5
+        },
+        {
+          "gesture_name": "Thumb and index finger extension",
+          "illustration": "./datasets/GrabMyo/thumb_index_finger_extension.jpg",
+          "id": 6
+        },
+        {
+          "gesture_name": "Index and middle finger extension",
+          "illustration": "./datasets/GrabMyo/index_middle_finger_extension.jpg",
+          "id": 7
+        },
+        {
+          "gesture_name": "Little finger extension",
+          "illustration": "./datasets/GrabMyo/little_finger_extension.jpg",
+          "id": 8
+        },
+        {
+          "gesture_name": "Index finger extension",
+          "illustration": "./datasets/GrabMyo/index_finger_extension.jpg",
+          "id": 9
+        },
+        {
+          "gesture_name": "Thumb extension",
+          "illustration": "./datasets/GrabMyo/thumb_extension.jpg",
+          "id": 10
+        },
+        {
+          "gesture_name": "Wrist flexion",
+          "illustration": "./datasets/GrabMyo/wrist_flexion.jpg",
+          "id": 11
+        },
+        {
+          "gesture_name": "Wrist extension",
+          "illustration": "./datasets/GrabMyo/wrist_extension.jpg",
+          "id": 12
+        },
+        {
+          "gesture_name": "Forearm pronation",
+          "illustration": "./datasets/GrabMyo/forearm_pronation.jpg",
+          "id": 13
+        },
+        {
+          "gesture_name": "Forearm supination",
+          "illustration": "./datasets/GrabMyo/forearm_supination.jpg",
+          "id": 14
+        },
+        {
+          "gesture_name": "Hand open",
+          "illustration": "./datasets/GrabMyo/hand_open.jpg",
+          "id": 15
+        },
+        {
+          "gesture_name": "Hand close",
+          "illustration": "./datasets/GrabMyo/hand_close.jpg",
+          "id": 16
+        }
+      ]
+    }
+  ]
+}

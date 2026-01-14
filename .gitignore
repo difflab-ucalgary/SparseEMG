@@ -7,3 +7,6 @@ dist
 
 server/static/*
 server/__pycache__/
+
+*.log
+.vscode/

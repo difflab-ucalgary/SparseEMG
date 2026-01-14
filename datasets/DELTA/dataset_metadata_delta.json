@@ -1,0 +1,59 @@
+{
+  "dataset_name": "DELTA",
+  "author_name": "Domenico, Dario Di and Boccardo, Nicolò and Marinelli, Andrea and Canepa, Michele and Gruppioni, Emanuele and Laffranchi, Matteo and Camoriano, Raffaello",
+  "link_to_dataset": "https://zenodo.org/records/10801000",
+  "publication_venue": "IEEE Robotics and Automation Letters",
+  "publication_venue_short": "IEEE Robotics and Automation Letters",
+  "year": 2024,
+  "number_of_electrodes": 64,
+  "electrode_size": "5mm",
+  "electrode_spacing": "10mm",
+  "number_of_rows": 8,
+  "number_of_columns": 8,
+  "number_of_gestures": 7,
+  "electrode_placement_illustration": "./datasets/DELTA/electrode_placement.svg",
+  "gesture_classes": [
+    {
+      "class_name": " ",
+      "gestures": [
+        {
+          "gesture_name": "Rest",
+          "illustration": "./datasets/DELTA/idle.jpg",
+          "id": 0
+        },
+        {
+          "gesture_name": "Hand Close",
+          "illustration": "./datasets/DELTA/hand_close.jpg",
+          "id": 1
+        },
+        {
+          "gesture_name": "Wrist Flexion",
+          "illustration": "./datasets/DELTA/wrist_flexion.jpg",
+          "id": 5
+        },
+        {
+          "gesture_name": "Wrist Extension",
+          "illustration": "./datasets/DELTA/wrist_extension.jpg",
+          "id": 6
+        },
+        {
+          "gesture_name": "Hand Open",
+          "illustration": "./datasets/DELTA/hand_open.jpg",
+          "id": 2
+        },
+        {
+          "gesture_name": "Wrist Pronation",
+          "illustration": "./datasets/DELTA/wrist_pronation.jpg",
+          "id": 3
+        },
+        {
+          "gesture_name": "Wrist Supination",
+          "illustration": "./datasets/DELTA/wrist_supination.jpg",
+          "id": 4
+        }
+      ]
+    }
+  ]
+}
+
+
